@@ -4,3 +4,10 @@ server:
 logging:
   level:
     root: info
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: admin
+    password: Ti172ne34pod
+    url: jdbc:postgresql://localhost:5432/fevent

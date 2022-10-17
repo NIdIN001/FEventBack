@@ -1,14 +1,17 @@
 package ru.nsu.fevent.service
 
 import org.springframework.stereotype.Service
-import ru.nsu.fevent.dto.PersonalDataRequest
+import org.springframework.util.Base64Utils
 import ru.nsu.fevent.dto.RegistrationRequest
 import ru.nsu.fevent.dto.UserDto
 import ru.nsu.fevent.exception.RegistrationException
+import ru.nsu.fevent.repository.UserRepository
+import ru.nsu.fevent.utils.PasswordGenerationUtils
+import ru.nsu.fevent.utils.UserMapper
 import java.util.regex.Pattern
 
 @Service
-class UserService {
+class UserService(val userRepository: UserRepository) {
 
     companion object {
         private val CAPITAL_LETTER_PATTERN = Pattern.compile("[A-ZА-Я]")
@@ -24,19 +27,22 @@ class UserService {
     fun registerUser(registrationRequest: RegistrationRequest): UserDto {
         validatePassword(registrationRequest.password, registrationRequest.passwordCheck)
 
-        /* todo сделать сохраниение нового юзера в БД и возврат сохраненного пользователя из метода */
-        return UserDto(null, null, null, registrationRequest.email)
-    }
+        userRepository.findFirstByLogin(registrationRequest.login)
+            ?.let { throw RegistrationException("Пользователь с логином ${registrationRequest.login} уже существует") }
 
-    fun addPersonalInfo(personalDataRequest: PersonalDataRequest): UserDto {
+        userRepository.findFirstByPhoneNumber(registrationRequest.phoneNumber)
+            ?.let { throw RegistrationException("Пользователь с номером телефона ${registrationRequest.phoneNumber} уже существует") }
 
-        /* todo сделать изменение персональных данный пользователя и возврат сохраненного пользователя из метода*/
-        return UserDto(
-            personalDataRequest.firstName,
-            personalDataRequest.lastName,
-            personalDataRequest.city,
-            "test@mail.ru"
-        )
+        val salt = PasswordGenerationUtils.generateSalt()
+        val saltBase64 = Base64Utils.encodeToString(salt)
+        val hashPassword = PasswordGenerationUtils.hashPassword(registrationRequest.password, salt)
+        val hashPasswordBase64 = Base64Utils.encodeToString(hashPassword)
+
+        val user = UserMapper.mapRegistrationRequestToEntity(registrationRequest, saltBase64, hashPasswordBase64)
+
+        val savedUser = userRepository.save(user)
+
+        return UserMapper.mapEntityToDto(savedUser)
     }
 
     private fun validatePassword(password: String, passwordCheck: String) {
