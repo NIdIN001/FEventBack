@@ -36,6 +36,9 @@ data class User(
     @Column(name = "phone_number")
     var phoneNumber: String? = null,
 
+    @Column(name = "refresh_token")
+    var refreshToken: String? = null,
+
     @Column(name = "created_at")
-    var createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime? = null
 )

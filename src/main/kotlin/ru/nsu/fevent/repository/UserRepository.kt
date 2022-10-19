@@ -7,7 +7,7 @@ import ru.nsu.fevent.entity.User
 @Repository
 interface UserRepository : CrudRepository<User?, Int?> {
 
-    fun findFirstByLogin(login: String): User?
+    fun getByLogin(login: String): User?
 
-    fun findFirstByPhoneNumber(phoneNumber: String): User?
+    fun getByPhoneNumber(phoneNumber: String): User?
 }

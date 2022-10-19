@@ -5,6 +5,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.nsu.fevent.dto.Response
+import ru.nsu.fevent.exception.AuthException
 import ru.nsu.fevent.exception.RegistrationException
 
 @RestControllerAdvice
@@ -12,6 +13,11 @@ class ExceptionHandlerController {
 
     @ExceptionHandler(RegistrationException::class)
     fun registrationExceptionHandler(exception: RegistrationException): Response<Nothing> {
+        return Response.withError(exception.message)
+    }
+
+    @ExceptionHandler(AuthException::class)
+    fun authExceptionHandler(exception: AuthException): Response<Nothing> {
         return Response.withError(exception.message)
     }
 
