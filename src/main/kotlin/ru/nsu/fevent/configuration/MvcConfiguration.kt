@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import ru.nsu.fevent.controller.interceptor.AuthenticationInterceptor
-import ru.nsu.fevent.controller.interceptor.LoggerInterceptor
 
 @Configuration
 class MvcConfiguration(
@@ -14,11 +13,9 @@ class MvcConfiguration(
     override fun addInterceptors(registry: InterceptorRegistry) {
         super.addInterceptors(registry)
 
+        /* Формирование защиненных ресурсов, доступ к которым разрешен только аутентифицированным пользователям */
         registry.addInterceptor(authenticationInterceptor)
-            .excludePathPatterns("/**/register", "/**/login")
             .addPathPatterns("/**")
-
-        registry.addInterceptor(LoggerInterceptor())
-            .addPathPatterns("/**")
+            .excludePathPatterns("/user/register", "/authenticate/login")
     }
 }

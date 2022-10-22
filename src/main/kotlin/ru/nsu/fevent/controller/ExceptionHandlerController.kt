@@ -4,6 +4,7 @@ import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import ru.nsu.fevent.dto.ErrorStatus
 import ru.nsu.fevent.dto.Response
 import ru.nsu.fevent.exception.AuthException
 import ru.nsu.fevent.exception.RegistrationException
@@ -18,7 +19,7 @@ class ExceptionHandlerController {
 
     @ExceptionHandler(AuthException::class)
     fun authExceptionHandler(exception: AuthException): Response<Nothing> {
-        return Response.withError(exception.message)
+        return Response.withError(ErrorStatus.AUTH_ERROR, exception.message)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)

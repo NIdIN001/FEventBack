@@ -12,6 +12,11 @@ import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Перехватчик, проверяющий, что в cookie переданного запроса содержится JWT с информацией о пользователе
+ * для доступа к защищенному ресурсу, если пользоватей не передал нужные данные, то доступ запрещен с ошибкой
+ * AuthException. Список защищенных ресусров формируется в MvcConfiguration.
+ */
 @Component
 class AuthenticationInterceptor(private val userRepository: UserRepository) : HandlerInterceptor {
 
@@ -20,15 +25,17 @@ class AuthenticationInterceptor(private val userRepository: UserRepository) : Ha
     }
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        val cookiesArray = request.cookies ?: throw AuthException("Отсутствует cookie c jwt токенами")
+        val cookiesArray = request.cookies ?: throw AuthException("Пользователь не авторизован")
 
         val accessTokenCookie = Arrays.stream(cookiesArray)
             .filter { c -> c.name == "accessToken" }
-            .findFirst().orElseThrow { AuthException("Отсутствует обязательный cookie \"accessToken\"") }
+            .findFirst()
+            .orElseThrow { AuthException("Отсутствует обязательный cookie \"accessToken\"") }
 
         val refreshTokenCookie = Arrays.stream(cookiesArray)
             .filter { c -> c.name == "refreshToken" }
-            .findFirst().orElseThrow { AuthException("Отсутствует обязательный cookie \"refreshToken\"") }
+            .findFirst()
+            .orElseThrow { AuthException("Отсутствует обязательный cookie \"refreshToken\"") }
 
         val decodedAccessTokenJwt = JwtUtils.verifyToken(accessTokenCookie.value)
         if (getNow().after(decodedAccessTokenJwt.expiresAt)) {
