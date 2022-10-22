@@ -8,6 +8,7 @@ import ru.nsu.fevent.exception.RegistrationException
 import ru.nsu.fevent.repository.UserRepository
 import ru.nsu.fevent.utils.PasswordGenerationUtils
 import ru.nsu.fevent.utils.UserMapper
+import java.time.LocalDateTime
 import java.util.regex.Pattern
 
 @Service
@@ -27,10 +28,10 @@ class UserService(val userRepository: UserRepository) {
     fun registerUser(registrationRequest: RegistrationRequest): UserDto {
         validatePassword(registrationRequest.password, registrationRequest.passwordCheck)
 
-        userRepository.findFirstByLogin(registrationRequest.login)
+        userRepository.getByLogin(registrationRequest.login)
             ?.let { throw RegistrationException("Пользователь с логином ${registrationRequest.login} уже существует") }
 
-        userRepository.findFirstByPhoneNumber(registrationRequest.phoneNumber)
+        userRepository.getByPhoneNumber(registrationRequest.phoneNumber)
             ?.let { throw RegistrationException("Пользователь с номером телефона ${registrationRequest.phoneNumber} уже существует") }
 
         val salt = PasswordGenerationUtils.generateSalt()
@@ -39,6 +40,7 @@ class UserService(val userRepository: UserRepository) {
         val hashPasswordBase64 = Base64Utils.encodeToString(hashPassword)
 
         val user = UserMapper.mapRegistrationRequestToEntity(registrationRequest, saltBase64, hashPasswordBase64)
+        user.createdAt = LocalDateTime.now()
 
         val savedUser = userRepository.save(user)
 

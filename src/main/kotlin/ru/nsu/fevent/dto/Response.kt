@@ -8,5 +8,6 @@ data class Response<T>(
     companion object {
         fun <T> withData(data: T?) = Response(data, ErrorStatus.OK, null)
         fun withError(errorMessage: String?) = Response(null, ErrorStatus.ERROR, errorMessage)
+        fun withError(errorStatus: ErrorStatus, errorMessage: String?) = Response(null, errorStatus, errorMessage)
     }
 }
