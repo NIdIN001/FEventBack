@@ -13,7 +13,7 @@ data class User(
     val id: Int = 0,
 
     @Column(name = "login")
-    val login: String = "",
+    var login: String = "",
 
     @Column(name = "salt")
     var salt: String = "",
@@ -28,10 +28,10 @@ data class User(
     var city: String? = null,
 
     @Column(name = "first_name")
-    val firstName: String = "",
+    var firstName: String = "",
 
     @Column(name = "last_name")
-    val lastName: String = "",
+    var lastName: String = "",
 
     @Column(name = "phone_number")
     var phoneNumber: String? = null,

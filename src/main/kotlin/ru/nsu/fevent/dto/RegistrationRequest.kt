@@ -42,5 +42,5 @@ data class RegistrationRequest(
 
     @field:NotBlank(message = "Поле \"Мобильный телефон\" не должно быть пустым")
     @field:Size(min = 11, max = 11, message = "Длина поля \"Мобильный телефон\" должна быть 11 символов")
-    val phoneNumber: String,
+    val phoneNumber: String
 )

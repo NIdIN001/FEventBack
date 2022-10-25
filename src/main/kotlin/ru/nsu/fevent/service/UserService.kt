@@ -2,10 +2,14 @@ package ru.nsu.fevent.service
 
 import org.springframework.stereotype.Service
 import org.springframework.util.Base64Utils
+import ru.nsu.fevent.dto.ProfileInfoRequest
 import ru.nsu.fevent.dto.RegistrationRequest
 import ru.nsu.fevent.dto.UserDto
+import ru.nsu.fevent.entity.User
 import ru.nsu.fevent.exception.RegistrationException
+import ru.nsu.fevent.exception.UserNotFoundException
 import ru.nsu.fevent.repository.UserRepository
+import ru.nsu.fevent.utils.JwtUtils
 import ru.nsu.fevent.utils.PasswordGenerationUtils
 import ru.nsu.fevent.utils.UserMapper
 import java.time.LocalDateTime
@@ -61,5 +65,30 @@ class UserService(val userRepository: UserRepository) {
         if (!regex.matcher(password).find()) {
             throw RegistrationException(errorMessage)
         }
+    }
+
+    private fun findUserByAccessToken(accessToken: String): User {
+        val decodedAccessTokenJwt = JwtUtils.verifyToken(accessToken)
+        println(Integer.parseInt(decodedAccessTokenJwt.subject))
+        val userOptional =  userRepository.findById(Integer.parseInt(decodedAccessTokenJwt.subject))
+        if (userOptional.isEmpty) {
+            println("12434345")
+            throw UserNotFoundException("Пользователь не найден")
+        }
+        return userOptional.get()
+    }
+    fun getUserPersonalInfo(accessToken: String): UserDto {
+        return UserMapper.mapEntityToDto(findUserByAccessToken(accessToken))
+    }
+
+    fun changeUserPersonalInfo(accessToken: String, request: ProfileInfoRequest) : UserDto {
+        val user = findUserByAccessToken(accessToken)
+        user.city = request.city
+        user.login = request.login
+        user.firstName = request.firstName
+        user.lastName = request.lastName
+        user.phoneNumber = request.phoneNumber
+        userRepository.save(user)
+        return UserMapper.mapEntityToDto(user)
     }
 }
