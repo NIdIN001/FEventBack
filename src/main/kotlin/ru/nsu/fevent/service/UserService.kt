@@ -5,7 +5,6 @@ import org.springframework.util.Base64Utils
 import ru.nsu.fevent.dto.ProfileInfoRequest
 import ru.nsu.fevent.dto.RegistrationRequest
 import ru.nsu.fevent.dto.UserDto
-import ru.nsu.fevent.entity.User
 import ru.nsu.fevent.exception.RegistrationException
 import ru.nsu.fevent.exception.UserNotFoundException
 import ru.nsu.fevent.repository.UserRepository
@@ -67,29 +66,29 @@ class UserService(val userRepository: UserRepository) {
         }
     }
 
-    private fun findUserByAccessToken(accessToken: String): User {
-        val decodedAccessTokenJwt = JwtUtils.verifyToken(accessToken)
-        println(Integer.parseInt(decodedAccessTokenJwt.subject))
-        val userOptional =  userRepository.findById(Integer.parseInt(decodedAccessTokenJwt.subject))
-        if (userOptional.isEmpty) {
-            println("12434345")
-            throw UserNotFoundException("Пользователь не найден")
-        }
-        return userOptional.get()
-    }
+
 
     fun getUserPersonalInfo(accessToken: String): UserDto {
-        return UserMapper.mapEntityToDto(findUserByAccessToken(accessToken))
+        val user = userRepository.findById(JwtUtils.getUserIdByAccessToken(accessToken))
+        if(user.isEmpty) {
+            throw UserNotFoundException("Пользователь не найден")
+        }
+        return UserMapper.mapEntityToDto(user.get())
     }
 
     fun changeUserPersonalInfo(accessToken: String, request: ProfileInfoRequest) : UserDto {
-        val user = findUserByAccessToken(accessToken)
+        val userOptional = userRepository.findById(JwtUtils.getUserIdByAccessToken(accessToken))
+        if(userOptional.isEmpty) {
+            throw UserNotFoundException("Пользователь не найден")
+        }
+        val user = userOptional.get()
+
         user.city = request.city
         user.login = request.login
         user.firstName = request.firstName
         user.lastName = request.lastName
         user.phoneNumber = request.phoneNumber
-        userRepository.save(user)
-        return UserMapper.mapEntityToDto(user)
+        val savedUser = userRepository.save(user)
+        return UserMapper.mapEntityToDto(savedUser)
     }
 }
