@@ -38,4 +38,10 @@ object JwtUtils {
             throw AuthException("Переданный JWT токен не валиден")
         }
     }
+
+    fun getUserIdByAccessToken(accessToken: String): Int {
+        val decodedAccessTokenJwt = verifyToken(accessToken)
+        return Integer.parseInt(decodedAccessTokenJwt.subject)
+    }
+
 }
