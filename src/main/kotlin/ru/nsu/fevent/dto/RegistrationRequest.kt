@@ -18,7 +18,7 @@ data class RegistrationRequest(
     val email: String?,
 
     @field:NotBlank(message = "Поле \"Логин\" не должно быть пустым")
-    @field:Size(max = 64, message = "Длина логина должны быть до 64 символов")
+    @field:Size(max = 64, message = "Длина логина должна быть до 64 символов")
     val login: String,
 
     @field:NotBlank(message = "Поле \"Пароль\" не должно быть пустым")

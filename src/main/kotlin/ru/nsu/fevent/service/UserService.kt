@@ -77,6 +77,7 @@ class UserService(val userRepository: UserRepository) {
         }
         return userOptional.get()
     }
+
     fun getUserPersonalInfo(accessToken: String): UserDto {
         return UserMapper.mapEntityToDto(findUserByAccessToken(accessToken))
     }
