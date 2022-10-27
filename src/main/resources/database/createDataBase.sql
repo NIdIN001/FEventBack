@@ -1,4 +1,5 @@
 CREATE SEQUENCE IF NOT EXISTS user_seq;
+CREATE SEQUENCE IF NOT EXISTS friend_seq;
 
 CREATE TABLE IF NOT EXISTS users
 (
@@ -14,4 +15,15 @@ CREATE TABLE IF NOT EXISTS users
     "friends_number"    INTEGER            NOT NULL DEFAULT 0,
     "created_at"        TIMESTAMP          NOT NULL,
     "refresh_token"     TEXT
+);
+
+CREATE TABLE IF NOT EXISTS friends
+(
+    "id"                INTEGER            PRIMARY KEY NOT NULL,
+    "status"            VARCHAR(10)        NOT NULL,
+    "to_id"             INTEGER            NOT NULL,
+    "from_id"           INTEGER            NOT NULL,
+
+    CONSTRAINT fk_friend_from FOREIGN KEY ("from_id") REFERENCES users (id),
+    CONSTRAINT fk_friend_to FOREIGN KEY ("to_id") REFERENCES users (id)
 );
