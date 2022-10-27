@@ -6,7 +6,6 @@ import ru.nsu.fevent.dto.LoginResponse
 import ru.nsu.fevent.dto.Response
 import ru.nsu.fevent.service.AuthService
 import ru.nsu.fevent.utils.CookieUtils
-import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -34,20 +33,8 @@ class AuthController(
         response: HttpServletResponse,
         @CookieValue(name = "accessToken") accessToken: String
     ): Response<String> {
-        deleteAuthCookies(response)
+        CookieUtils.deleteAuthCookies(response)
 
         return Response.withData("SUCCESS")
-    }
-
-    private fun deleteAuthCookies(response: HttpServletResponse) {
-        val accessTokenCookie = Cookie("accessToken", "")
-        accessTokenCookie.maxAge = 0
-        accessTokenCookie.path = "/"
-        val refreshTokenCookie = Cookie("refreshToken", "")
-        refreshTokenCookie.maxAge = 0
-        refreshTokenCookie.path = "/"
-
-        response.addCookie(accessTokenCookie)
-        response.addCookie(refreshTokenCookie)
     }
 }
