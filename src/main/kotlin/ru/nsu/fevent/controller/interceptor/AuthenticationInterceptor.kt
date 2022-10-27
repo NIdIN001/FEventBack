@@ -1,14 +1,15 @@
 package ru.nsu.fevent.controller.interceptor
 
+import com.auth0.jwt.exceptions.JWTVerificationException
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import ru.nsu.fevent.entity.User
 import ru.nsu.fevent.exception.AuthException
 import ru.nsu.fevent.repository.UserRepository
+import ru.nsu.fevent.utils.CookieUtils
 import ru.nsu.fevent.utils.JwtUtils
 import java.util.*
-import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -37,7 +38,7 @@ class AuthenticationInterceptor(private val userRepository: UserRepository) : Ha
             .findFirst()
             .orElseThrow { AuthException("Отсутствует обязательный cookie \"refreshToken\"") }
 
-        val decodedAccessTokenJwt = JwtUtils.verifyToken(accessTokenCookie.value)
+        val decodedAccessTokenJwt = JwtUtils.parseToken(accessTokenCookie.value)
         if (getNow().after(decodedAccessTokenJwt.expiresAt)) {
             logger.info { "Access токен пользователя id=${decodedAccessTokenJwt.subject} просрочен" }
             val userOptional = userRepository.findById(Integer.parseInt(decodedAccessTokenJwt.subject))
@@ -52,6 +53,12 @@ class AuthenticationInterceptor(private val userRepository: UserRepository) : Ha
             } else {
                 updateJwtTokenPair(user, response)
             }
+        } else {
+            try {
+                JwtUtils.verifyToken(accessTokenCookie.value)
+            } catch (e: JWTVerificationException) {
+                throw AuthException("Переданный JWT токен не валиден")
+            }
         }
 
         return true
@@ -61,8 +68,8 @@ class AuthenticationInterceptor(private val userRepository: UserRepository) : Ha
         val jwtPair = JwtUtils.generateTokenPair(user)
         user.refreshToken = jwtPair.refreshToken
         userRepository.save(user)
-        response.addCookie(Cookie("accessToken", jwtPair.accessToken))
-        response.addCookie(Cookie("refreshToken", jwtPair.refreshToken))
+
+        CookieUtils.addAuthCookies(response, jwtPair.accessToken, jwtPair.refreshToken)
         logger.info { "Обновлены JWT токены пользователя id=${user.id}" }
     }
 

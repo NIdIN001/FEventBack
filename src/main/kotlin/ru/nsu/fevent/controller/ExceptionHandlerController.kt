@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.nsu.fevent.dto.ErrorStatus
 import ru.nsu.fevent.dto.Response
 import ru.nsu.fevent.exception.AuthException
+import ru.nsu.fevent.exception.FriendException
 import ru.nsu.fevent.exception.RegistrationException
 import ru.nsu.fevent.exception.UserNotFoundException
 
@@ -37,6 +38,11 @@ class ExceptionHandlerController {
 
     @ExceptionHandler(UserNotFoundException::class)
     fun userNotFoundExceptionHandler(exception: UserNotFoundException): Response<Nothing> {
+        return Response.withError(exception.message)
+    }
+
+    @ExceptionHandler(FriendException::class)
+    fun friendExceptionHandler(exception: FriendException): Response<Nothing> {
         return Response.withError(exception.message)
     }
 }

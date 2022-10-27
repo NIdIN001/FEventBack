@@ -66,8 +66,6 @@ class UserService(val userRepository: UserRepository) {
         }
     }
 
-
-
     fun getUserPersonalInfo(accessToken: String): UserDto {
         val user = userRepository.findById(JwtUtils.getUserIdByAccessToken(accessToken))
         if(user.isEmpty) {

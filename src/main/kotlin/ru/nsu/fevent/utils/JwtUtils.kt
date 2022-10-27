@@ -30,6 +30,10 @@ object JwtUtils {
         return JwtPair(authToken, refreshToken)
     }
 
+    fun parseToken(token: String): DecodedJWT {
+        return JWT().decodeJwt(token)
+    }
+
     fun verifyToken(token: String): DecodedJWT {
         return try {
             val verifier: JWTVerifier = JWT.require(algorithm).build()
@@ -40,8 +44,7 @@ object JwtUtils {
     }
 
     fun getUserIdByAccessToken(accessToken: String): Int {
-        val decodedAccessTokenJwt = verifyToken(accessToken)
+        val decodedAccessTokenJwt = parseToken(accessToken)
         return Integer.parseInt(decodedAccessTokenJwt.subject)
     }
-
 }
