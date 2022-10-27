@@ -37,6 +37,10 @@ class FriendService(
         val user = getUserById(userId)
         val friend = getUserById(friendId)
 
+        if (friendRepository.containsRelation(user, friend)){
+            throw FriendException("Заявка в друзья уже существует.")
+        }
+
         val relation = FriendRelation(
             from = user, to = friend, status = FriendStatus.REQUEST
         )

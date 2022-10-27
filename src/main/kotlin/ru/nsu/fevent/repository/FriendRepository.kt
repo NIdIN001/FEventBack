@@ -42,4 +42,15 @@ interface FriendRepository : CrudRepository<FriendRelation, Int> {
         @Param("user") user: User,
         @Param("status") status: FriendStatus
     ): Int
+
+    @Query(
+        value = "SELECT (COUNT (relation) > 0) FROM FriendRelation relation " +
+                "WHERE " +
+                "(relation.from = :user AND relation.to = :friend) OR " +
+                "(relation.to = :user AND relation.from = :friend)"
+    )
+    fun containsRelation(
+        @Param("user") user: User,
+        @Param("friend") friend: User
+    ): Boolean
 }
