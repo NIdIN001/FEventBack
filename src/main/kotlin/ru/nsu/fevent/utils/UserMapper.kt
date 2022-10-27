@@ -25,6 +25,7 @@ object UserMapper {
             userEntity.lastName,
             userEntity.city,
             userEntity.email,
+            userEntity.phoneNumber,
             userEntity.createdAt.toString()
         )
 }

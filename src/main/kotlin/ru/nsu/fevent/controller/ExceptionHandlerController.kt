@@ -8,6 +8,7 @@ import ru.nsu.fevent.dto.ErrorStatus
 import ru.nsu.fevent.dto.Response
 import ru.nsu.fevent.exception.AuthException
 import ru.nsu.fevent.exception.RegistrationException
+import ru.nsu.fevent.exception.UserNotFoundException
 
 @RestControllerAdvice
 class ExceptionHandlerController {
@@ -32,5 +33,10 @@ class ExceptionHandlerController {
             .getOrElse(0) { "Неизвестная ошибка" }
 
         return Response.withError(errorMessage)
+    }
+
+    @ExceptionHandler(UserNotFoundException::class)
+    fun userNotFoundExceptionHandler(exception: UserNotFoundException): Response<Nothing> {
+        return Response.withError(exception.message)
     }
 }
