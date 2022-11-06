@@ -1,4 +1,47 @@
 package ru.nsu.fevent.entity
 
-class Event {
-}
+import java.time.LocalDateTime
+import javax.persistence.*
+
+@Entity()
+@Table(name = "events")
+data class Event(
+    @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_seq")
+    @SequenceGenerator(name = "event_seq", allocationSize = 1)
+    val id: Int = 0,
+
+    @Column(name = "name")
+    val name: String = "",
+
+    @Column(name = "description")
+    val description: String? = null,
+
+    @Column(name = "datetime_start")
+    val datetimeStart: LocalDateTime = LocalDateTime.now(),
+
+    @Column(name = "datetime_end")
+    val datetimeEnd: LocalDateTime? = null,
+
+    @Column(name = "address")
+    val address: String = "",
+
+    @Column(name = "max_members")
+    val maxMembers: Int? = null,
+
+    @Column(name = "age_min")
+    val ageMin: Int? = null,
+
+    @Column(name = "age_max")
+    val ageMax: Int? = null,
+
+    @Column(name = "is_online")
+    val isOnline: Boolean = false,
+
+    @Column(name = "is_private")
+    val isPrivate: Boolean = false,
+
+    @Column(name = "creator_id")
+    val creatorId: Int? = null
+)

@@ -1,5 +1,6 @@
 CREATE SEQUENCE IF NOT EXISTS user_seq;
 CREATE SEQUENCE IF NOT EXISTS friend_seq;
+CREATE SEQUENCE IF NOT EXISTS event_seq;
 
 CREATE TABLE IF NOT EXISTS users
 (
@@ -26,4 +27,22 @@ CREATE TABLE IF NOT EXISTS friends
 
     CONSTRAINT fk_friend_from FOREIGN KEY ("from_id") REFERENCES users (id),
     CONSTRAINT fk_friend_to FOREIGN KEY ("to_id") REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXIST events
+(
+	"id"                INTEGER            PRIMARY KEY NOT NULL,
+	"name"              VARCHAR(128)       NOT NULL,
+	"description"       TEXT,
+	"datetime_start"    TIMESTAMP          NOT NULL,
+	"datetime_end"      TIMESTAMP,
+	"address"           VARCHAR(128)       NOT NULL,
+	"max_members"       INTEGER,
+	"age_min"           INTEGER,
+	"age_max"           INTEGER,
+	"is_online"         BOOLEAN 		   NOT NULL,
+	"is_private"        BOOLEAN            NOT NULL,
+	"creator_id"        INTEGER            NOT NULL,
+
+	CONSTRAINT fk_event_creator FOREIGN KEY ("creator_id") REFERENCES users ("id")
 );
