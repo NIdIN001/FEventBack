@@ -21,7 +21,8 @@ class MvcConfiguration(
             .excludePathPatterns(
                 "/user/register",
                 "/authenticate/login",
-                "/actuator/**"
+                "/actuator/**",
+                "/city"
             )
     }
 }
