@@ -6,7 +6,7 @@ import ru.nsu.fevent.entity.Event
 import ru.nsu.fevent.entity.User
 
 object EventMapper {
-    fun mapEventCreateRequestToEntity(eventCreateRequest: EventCreateRequest, creatorId: User): Event =
+    fun mapEventCreateRequestToEntity(eventCreateRequest: EventCreateRequest, creator: User): Event =
         Event(
             name = eventCreateRequest.name,
             description = eventCreateRequest.description,
@@ -18,7 +18,7 @@ object EventMapper {
             ageMax = eventCreateRequest.ageMax,
             isOnline = eventCreateRequest.isOnline,
             isPrivate = eventCreateRequest.isPrivate,
-            creatorId = creatorId
+            creator = creator
         )
 
     fun mapEntityToDto(eventEntity: Event, creatorId: Int): EventDto =

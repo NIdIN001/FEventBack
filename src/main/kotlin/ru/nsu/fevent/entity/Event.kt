@@ -43,5 +43,5 @@ data class Event(
     val isPrivate: Boolean = false,
 
     @ManyToOne(targetEntity = User::class, fetch = FetchType.EAGER)
-    val creatorId: User
+    val creator: User
 )
