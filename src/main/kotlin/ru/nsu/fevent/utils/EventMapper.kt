@@ -3,25 +3,27 @@ package ru.nsu.fevent.utils
 import ru.nsu.fevent.dto.EventCreateRequest
 import ru.nsu.fevent.dto.EventDto
 import ru.nsu.fevent.entity.Event
+import ru.nsu.fevent.entity.User
 
 object EventMapper {
-    fun mapEventCreateRequestToEntity(eventCreateRequest: EventCreateRequest): Event =
+    fun mapEventCreateRequestToEntity(eventCreateRequest: EventCreateRequest, creator: User): Event =
         Event(
             name = eventCreateRequest.name,
             description = eventCreateRequest.description,
-            datetimeStart = eventCreateRequest.datetime_start,
-            datetimeEnd = eventCreateRequest.datetime_end,
+            datetimeStart = eventCreateRequest.datetimeStart,
+            datetimeEnd = eventCreateRequest.datetimeEnd,
             address = eventCreateRequest.address,
-            maxMembers = eventCreateRequest.max_members,
-            ageMin = eventCreateRequest.age_min,
-            ageMax = eventCreateRequest.age_max,
-            isOnline = eventCreateRequest.is_online,
-            isPrivate = eventCreateRequest.is_private,
-            creatorId = eventCreateRequest.creatorId
+            maxMembers = eventCreateRequest.maxMembers,
+            ageMin = eventCreateRequest.ageMin,
+            ageMax = eventCreateRequest.ageMax,
+            isOnline = eventCreateRequest.isOnline,
+            isPrivate = eventCreateRequest.isPrivate,
+            creator = creator
         )
 
-    fun mapEntityToDto(eventEntity: Event): EventDto =
+    fun mapEntityToDto(eventEntity: Event, creatorId: Int): EventDto =
         EventDto(
+            eventEntity.id,
             eventEntity.name,
             eventEntity.description,
             eventEntity.datetimeStart.toString(),
@@ -32,6 +34,6 @@ object EventMapper {
             eventEntity.ageMax,
             eventEntity.isOnline,
             eventEntity.isPrivate,
-            eventEntity.creatorId
+            creatorId
         )
 }
