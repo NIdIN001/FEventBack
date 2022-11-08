@@ -1,5 +1,8 @@
 CREATE SEQUENCE IF NOT EXISTS user_seq;
 CREATE SEQUENCE IF NOT EXISTS friend_seq;
+CREATE SEQUENCE IF NOT EXISTS geo_district_seq;
+CREATE SEQUENCE IF NOT EXISTS geo_region_seq;
+CREATE SEQUENCE IF NOT EXISTS geo_city_seq;
 
 CREATE TABLE IF NOT EXISTS users
 (
@@ -26,4 +29,26 @@ CREATE TABLE IF NOT EXISTS friends
 
     CONSTRAINT fk_friend_from FOREIGN KEY ("from_id") REFERENCES users (id),
     CONSTRAINT fk_friend_to FOREIGN KEY ("to_id") REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS geo_districts
+(
+    "id"                INTEGER             PRIMARY KEY NOT NULL,
+    "name"              VARCHAR(255)        NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS geo_regions (
+    "id"                INTEGER             PRIMARY KEY NOT NULL,
+    "district_id"       INTEGER             NOT NULL,
+    "name"              VARCHAR(255)        NOT NULL,
+
+    CONSTRAINT fk_region_district FOREIGN KEY ("district_id") REFERENCES geo_districts (id)
+);
+
+CREATE TABLE IF NOT EXISTS geo_cities (
+    "id"                INTEGER             PRIMARY KEY NOT NULL,
+    "region_id"         INTEGER             NOT NULL,
+    "name"              VARCHAR(255)        NOT NULL,
+
+    CONSTRAINT fk_city_region FOREIGN KEY ("region_id") REFERENCES geo_regions (id)
 );
