@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.nsu.fevent.dto.CitiesRequest
-import ru.nsu.fevent.dto.CitiesResponse
+import ru.nsu.fevent.dto.CityDto
 import ru.nsu.fevent.dto.Response
 import ru.nsu.fevent.service.CityService
 
@@ -13,7 +13,8 @@ import ru.nsu.fevent.service.CityService
 @RequestMapping("/city")
 class CityController (private val cityService: CityService) {
     @GetMapping
-    fun getCitiesStartsWith(@RequestBody citiesRequest: CitiesRequest): Response<CitiesResponse> {
-        return Response.withData(cityService.getCitiesStartsWith(citiesRequest.cityName))
+    fun getCitiesStartsWith(@RequestBody citiesRequest: CitiesRequest): Response<List<CityDto>> {
+        val cities = cityService.getCitiesStartsWith(citiesRequest.cityName)
+        return Response.withData(cities)
     }
 }
