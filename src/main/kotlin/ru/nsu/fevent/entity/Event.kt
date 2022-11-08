@@ -3,7 +3,7 @@ package ru.nsu.fevent.entity
 import java.time.LocalDateTime
 import javax.persistence.*
 
-@Entity()
+@Entity
 @Table(name = "events")
 data class Event(
     @Id
@@ -22,7 +22,7 @@ data class Event(
     val datetimeStart: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "datetime_end")
-    val datetimeEnd: LocalDateTime? = null,
+    val datetimeEnd: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "address")
     val address: String = "",
@@ -42,6 +42,6 @@ data class Event(
     @Column(name = "is_private")
     val isPrivate: Boolean = false,
 
-    @Column(name = "creator_id")
-    val creatorId: Int? = null
+    @ManyToOne(targetEntity = User::class, fetch = FetchType.EAGER)
+    val creatorId: User
 )

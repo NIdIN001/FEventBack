@@ -4,14 +4,16 @@ import org.springframework.stereotype.Service
 import ru.nsu.fevent.dto.EventCreateRequest
 import ru.nsu.fevent.dto.EventDto
 import ru.nsu.fevent.repository.EventRepository
+import ru.nsu.fevent.repository.UserRepository
 import ru.nsu.fevent.utils.EventMapper
 
 @Service
-class EventService(val eventRepository: EventRepository){
+class EventService(val eventRepository: EventRepository, val userRepository: UserRepository){
     fun createEvent(eventCreateRequest: EventCreateRequest): EventDto{
-        val event = EventMapper.mapEventCreateRequestToEntity(eventCreateRequest)
+        val creator = userRepository.getById(eventCreateRequest.creatorId)
+        val event = EventMapper.mapEventCreateRequestToEntity(eventCreateRequest, creator)
         val savedEvent = eventRepository.save(event)
 
-        return EventMapper.mapEntityToDto(savedEvent)
+        return EventMapper.mapEntityToDto(savedEvent, eventCreateRequest.creatorId)
     }
 }

@@ -14,7 +14,7 @@ data class EventCreateRequest (
     @field:NotBlank(message = "Поле \"Начало\"не должно быть пустым")
     val datetimeStart: LocalDateTime,
 
-    val datetimeEnd: LocalDateTime?,
+    val datetimeEnd: LocalDateTime,
 
     @field:NotBlank(message = "Поле \"Место проведения\" не должно быть пустым")
     @field:Size(max = 128, message = "Длина поля \"Место проведения\" должна быть до 128 символов")
@@ -32,5 +32,5 @@ data class EventCreateRequest (
     @field:NotBlank(message = "Поле \"Приватность\" не должно быть пустым")
     val isPrivate: Boolean,
 
-    val creatorId: Int?
+    val creatorId: Int
 )
