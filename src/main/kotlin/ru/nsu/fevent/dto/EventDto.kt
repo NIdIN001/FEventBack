@@ -12,5 +12,5 @@ data class EventDto(
     val ageMax: Int?,
     val isOnline: Boolean,
     val isPrivate: Boolean,
-    val creatorId: Int?
+    val creatorId: Int
 )
