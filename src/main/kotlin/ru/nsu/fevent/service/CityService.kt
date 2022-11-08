@@ -8,7 +8,7 @@ import ru.nsu.fevent.utils.CityMapper
 @Service
 class CityService (val cityRepository: CityRepository) {
     fun getCitiesStartsWith(name: String): List<CityDto> {
-        val cities =  cityRepository.findByNameStartsWithIgnoreCase(name)
+        val cities = cityRepository.findByNameStartsWithIgnoreCase(name)
         return cities.stream()
             .map { city -> CityMapper.mapCityToDto(city) }
             .toList()
