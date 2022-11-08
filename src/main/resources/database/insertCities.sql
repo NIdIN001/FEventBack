@@ -1222,3 +1222,7 @@ INSERT INTO "geo_cities" ("id", "region_id", "name") VALUES
     (1487, 86, 'Феодосия'),
     (1488, 86, 'Щелкино'),
     (1489, 86, 'Ялта');
+
+SELECT setval('geo_district_seq', (SELECT MAX(id) + 1 FROM geo_districts));
+SELECT setval('geo_region_seq', (SELECT MAX(id) + 1 FROM geo_regions));
+SELECT setval('geo_city_seq', (SELECT MAX(id) + 1 FROM geo_cities));

@@ -4,7 +4,6 @@ CREATE SEQUENCE IF NOT EXISTS geo_district_seq;
 CREATE SEQUENCE IF NOT EXISTS geo_region_seq;
 CREATE SEQUENCE IF NOT EXISTS geo_city_seq;
 
-
 CREATE TABLE IF NOT EXISTS users
 (
     "id"               	INTEGER 		   PRIMARY KEY NOT NULL,
@@ -38,15 +37,18 @@ CREATE TABLE IF NOT EXISTS geo_districts
     "name"              VARCHAR(255)        NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS geo_regions (
     "id"                INTEGER             PRIMARY KEY NOT NULL,
     "district_id"       INTEGER             NOT NULL,
-    "name"              VARCHAR(255)        NOT NULL
+    "name"              VARCHAR(255)        NOT NULL,
+
+    CONSTRAINT fk_region_district FOREIGN KEY ("district_id") REFERENCES geo_districts (id)
 );
 
 CREATE TABLE IF NOT EXISTS geo_cities (
     "id"                INTEGER             PRIMARY KEY NOT NULL,
     "region_id"         INTEGER             NOT NULL,
-    "name"              VARCHAR             NOT NULL
+    "name"              VARCHAR(255)        NOT NULL,
+
+    CONSTRAINT fk_city_region FOREIGN KEY ("region_id") REFERENCES geo_regions (id)
 );
