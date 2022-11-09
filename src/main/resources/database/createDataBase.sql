@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS friends
     CONSTRAINT fk_friend_to FOREIGN KEY ("to_id") REFERENCES users (id)
 );
 
-CREATE TABLE IF NOT EXIST events
+CREATE TABLE IF NOT EXISTS events
 (
 	"id"                INTEGER            PRIMARY KEY NOT NULL,
 	"name"              VARCHAR(128)       NOT NULL,
