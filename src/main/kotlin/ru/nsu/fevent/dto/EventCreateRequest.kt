@@ -31,7 +31,5 @@ data class EventCreateRequest (
     val isOnline: Boolean,
 
     @field:NotBlank(message = "Поле \"Приватность\" не должно быть пустым")
-    val isPrivate: Boolean,
-
-    val creatorId: Int
+    val isPrivate: Boolean
 )
