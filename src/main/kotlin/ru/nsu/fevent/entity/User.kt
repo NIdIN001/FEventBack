@@ -19,7 +19,7 @@ data class User(
     var salt: String = "",
 
     @Column(name = "password")
-    val password: String = "",
+    var password: String = "",
 
     @Column(name = "email")
     var email: String? = null,

@@ -2,34 +2,25 @@ package ru.nsu.fevent.service
 
 import org.springframework.stereotype.Service
 import org.springframework.util.Base64Utils
+import ru.nsu.fevent.dto.ChangePasswordRequest
 import ru.nsu.fevent.dto.ProfileInfoRequest
 import ru.nsu.fevent.dto.RegistrationRequest
 import ru.nsu.fevent.dto.UserDto
+import ru.nsu.fevent.entity.User
 import ru.nsu.fevent.exception.RegistrationException
 import ru.nsu.fevent.exception.UserNotFoundException
 import ru.nsu.fevent.repository.UserRepository
 import ru.nsu.fevent.utils.JwtUtils
 import ru.nsu.fevent.utils.PasswordGenerationUtils
+import ru.nsu.fevent.utils.PasswordUtils
 import ru.nsu.fevent.utils.UserMapper
 import java.time.LocalDateTime
-import java.util.regex.Pattern
 
 @Service
 class UserService(val userRepository: UserRepository) {
 
-    companion object {
-        private val CAPITAL_LETTER_PATTERN = Pattern.compile("[A-ZА-Я]")
-        private const val CAPITAL_LETTER_ERROR_MESSAGE = "Пароль должен содержать как минимум 1 заглавную букву"
-
-        private val DIGIT_PATTERN = Pattern.compile("[0-9]")
-        private const val DIGIT_ERROR_MESSAGE = "Пароль должен содержать как минимум 1 цифру"
-
-        private val SPECIAL_CHARACTER_PATTERN = Pattern.compile("[_@\\-!#$%^&*()+{}\"'?><,.~]")
-        private const val SPECIAL_CHARACTER_ERROR_MESSAGE = "Пароль должен содержать как минимум 1 спец. символ"
-    }
-
     fun registerUser(registrationRequest: RegistrationRequest): UserDto {
-        validatePassword(registrationRequest.password, registrationRequest.passwordCheck)
+        PasswordUtils.validatePassword(registrationRequest.password, registrationRequest.passwordCheck)
 
         userRepository.getByLogin(registrationRequest.login)
             ?.let { throw RegistrationException("Пользователь с логином ${registrationRequest.login} уже существует") }
@@ -50,42 +41,43 @@ class UserService(val userRepository: UserRepository) {
         return UserMapper.mapEntityToDto(savedUser)
     }
 
-    private fun validatePassword(password: String, passwordCheck: String) {
-        if (password != passwordCheck) {
-            throw RegistrationException("Пароли должны совпадать")
-        }
-
-        checkRegex(password, CAPITAL_LETTER_PATTERN, CAPITAL_LETTER_ERROR_MESSAGE)
-        checkRegex(password, DIGIT_PATTERN, DIGIT_ERROR_MESSAGE)
-        checkRegex(password, SPECIAL_CHARACTER_PATTERN, SPECIAL_CHARACTER_ERROR_MESSAGE)
-    }
-
-    private fun checkRegex(password: String, regex: Pattern, errorMessage: String) {
-        if (!regex.matcher(password).find()) {
-            throw RegistrationException(errorMessage)
-        }
-    }
-
     fun getUserPersonalInfo(accessToken: String): UserDto {
-        val user = userRepository.findById(JwtUtils.getUserIdByAccessToken(accessToken))
-        if(user.isEmpty) {
-            throw UserNotFoundException("Пользователь не найден")
-        }
-        return UserMapper.mapEntityToDto(user.get())
+        val user = findUserById(JwtUtils.getUserIdByAccessToken(accessToken))
+        return UserMapper.mapEntityToDto(user)
     }
 
     fun changeUserPersonalInfo(accessToken: String, request: ProfileInfoRequest) : UserDto {
-        val userOptional = userRepository.findById(JwtUtils.getUserIdByAccessToken(accessToken))
-        if(userOptional.isEmpty) {
-            throw UserNotFoundException("Пользователь не найден")
-        }
-        val user = userOptional.get()
+        val user = findUserById(JwtUtils.getUserIdByAccessToken(accessToken))
 
         user.city = request.city
         user.login = request.login
         user.firstName = request.firstName
         user.lastName = request.lastName
         user.phoneNumber = request.phoneNumber
+        val savedUser = userRepository.save(user)
+        return UserMapper.mapEntityToDto(savedUser)
+    }
+
+    private fun findUserById(id: Int): User {
+        val userOptional = userRepository.findById(id)
+        if(userOptional.isEmpty) {
+            throw UserNotFoundException("Пользователь не найден")
+        }
+        return userOptional.get()
+    }
+
+    fun changePassword(accessToken: String, request: ChangePasswordRequest): UserDto {
+        val user = findUserById(JwtUtils.getUserIdByAccessToken(accessToken))
+
+        PasswordUtils.checkPassword(request.oldPassword, user.password, user.salt)
+
+        PasswordUtils.validatePassword(request.newPassword, request.newPasswordCheck)
+
+        val salt = Base64Utils.decodeFromString(user.salt)
+        val hashedPassword = PasswordGenerationUtils.hashPassword(request.newPassword, salt)
+
+        user.password = Base64Utils.encodeToString(hashedPassword)
+
         val savedUser = userRepository.save(user)
         return UserMapper.mapEntityToDto(savedUser)
     }
