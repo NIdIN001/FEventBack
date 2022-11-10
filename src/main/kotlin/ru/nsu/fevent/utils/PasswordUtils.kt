@@ -1,6 +1,5 @@
 package ru.nsu.fevent.utils
 
-import org.springframework.util.Base64Utils
 import ru.nsu.fevent.exception.PasswordException
 import java.util.regex.Pattern
 
@@ -15,7 +14,7 @@ object PasswordUtils {
     private val SPECIAL_CHARACTER_PATTERN = Pattern.compile("[_@\\-!#$%^&*()+{}\"'?><,.~]")
     private const val SPECIAL_CHARACTER_ERROR_MESSAGE = "Пароль должен содержать как минимум 1 спец. символ"
 
-    fun validatePassword(password: String, passwordCheck: String) {
+    fun checkPasswordConstraints(password: String, passwordCheck: String) {
         if (password != passwordCheck) {
             throw PasswordException("Пароли должны совпадать")
         }
@@ -25,11 +24,11 @@ object PasswordUtils {
         checkRegex(password, SPECIAL_CHARACTER_PATTERN, SPECIAL_CHARACTER_ERROR_MESSAGE)
     }
 
-    fun checkPassword(enteredPassword: String, password: String, salt: String) {
+    fun checkEnteredPasswordMatchesUserPassword(enteredPassword: String, password: String, salt: String) {
         val hashedPassword = PasswordGenerationUtils
-            .hashPassword(enteredPassword, Base64Utils.decodeFromString(salt))
+            .hashPassword(enteredPassword, salt)
 
-        if (password != Base64Utils.encodeToString(hashedPassword)) {
+        if (password != hashedPassword) {
             throw PasswordException("Неверный пароль")
         }
     }

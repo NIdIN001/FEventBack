@@ -1,7 +1,6 @@
 package ru.nsu.fevent.service
 
 import org.springframework.stereotype.Service
-import org.springframework.util.Base64Utils
 import ru.nsu.fevent.dto.ChangePasswordRequest
 import ru.nsu.fevent.dto.ProfileInfoRequest
 import ru.nsu.fevent.dto.RegistrationRequest
@@ -20,7 +19,7 @@ import java.time.LocalDateTime
 class UserService(val userRepository: UserRepository) {
 
     fun registerUser(registrationRequest: RegistrationRequest): UserDto {
-        PasswordUtils.validatePassword(registrationRequest.password, registrationRequest.passwordCheck)
+        PasswordUtils.checkPasswordConstraints(registrationRequest.password, registrationRequest.passwordCheck)
 
         userRepository.getByLogin(registrationRequest.login)
             ?.let { throw RegistrationException("Пользователь с логином ${registrationRequest.login} уже существует") }
@@ -29,11 +28,11 @@ class UserService(val userRepository: UserRepository) {
             ?.let { throw RegistrationException("Пользователь с номером телефона ${registrationRequest.phoneNumber} уже существует") }
 
         val salt = PasswordGenerationUtils.generateSalt()
-        val saltBase64 = Base64Utils.encodeToString(salt)
-        val hashPassword = PasswordGenerationUtils.hashPassword(registrationRequest.password, salt)
-        val hashPasswordBase64 = Base64Utils.encodeToString(hashPassword)
+        val hashedPassword = PasswordGenerationUtils
+            .hashPassword(registrationRequest.password, salt)
 
-        val user = UserMapper.mapRegistrationRequestToEntity(registrationRequest, saltBase64, hashPasswordBase64)
+        val user = UserMapper
+            .mapRegistrationRequestToEntity(registrationRequest, salt, hashedPassword)
         user.createdAt = LocalDateTime.now()
 
         val savedUser = userRepository.save(user)
@@ -69,14 +68,16 @@ class UserService(val userRepository: UserRepository) {
     fun changePassword(accessToken: String, request: ChangePasswordRequest): UserDto {
         val user = findUserById(JwtUtils.getUserIdByAccessToken(accessToken))
 
-        PasswordUtils.checkPassword(request.oldPassword, user.password, user.salt)
+        PasswordUtils.checkEnteredPasswordMatchesUserPassword(request.oldPassword, user.password, user.salt)
 
-        PasswordUtils.validatePassword(request.newPassword, request.newPasswordCheck)
+        PasswordUtils.checkPasswordConstraints(request.newPassword, request.newPasswordCheck)
 
-        val salt = Base64Utils.decodeFromString(user.salt)
-        val hashedPassword = PasswordGenerationUtils.hashPassword(request.newPassword, salt)
+        val salt = PasswordGenerationUtils.generateSalt()
+        val hashedPassword = PasswordGenerationUtils
+            .hashPassword(request.newPassword, salt)
 
-        user.password = Base64Utils.encodeToString(hashedPassword)
+        user.salt = salt
+        user.password = hashedPassword
 
         val savedUser = userRepository.save(user)
         return UserMapper.mapEntityToDto(savedUser)
