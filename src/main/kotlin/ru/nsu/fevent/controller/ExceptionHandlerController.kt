@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.nsu.fevent.dto.ErrorStatus
 import ru.nsu.fevent.dto.Response
-import ru.nsu.fevent.exception.AuthException
-import ru.nsu.fevent.exception.FriendException
-import ru.nsu.fevent.exception.RegistrationException
-import ru.nsu.fevent.exception.UserNotFoundException
+import ru.nsu.fevent.exception.*
 
 @RestControllerAdvice
 class ExceptionHandlerController {
@@ -43,6 +40,11 @@ class ExceptionHandlerController {
 
     @ExceptionHandler(FriendException::class)
     fun friendExceptionHandler(exception: FriendException): Response<Nothing> {
+        return Response.withError(exception.message)
+    }
+
+    @ExceptionHandler(PasswordException::class)
+    fun passwordExceptionHandler(exception: PasswordException): Response<Nothing> {
         return Response.withError(exception.message)
     }
 }

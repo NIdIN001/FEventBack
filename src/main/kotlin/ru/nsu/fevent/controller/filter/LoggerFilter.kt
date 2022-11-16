@@ -14,7 +14,11 @@ class LoggerFilter : OncePerRequestFilter() {
 
     companion object {
         private val LOGGER = KotlinLogging.logger {}
+
+        private val EXCLUDE_PATH = setOf("/actuator/prometheus")
     }
+
+    override fun shouldNotFilter(request: HttpServletRequest) = EXCLUDE_PATH.contains(request.requestURI)
 
     override fun doFilterInternal(
         request: HttpServletRequest,
