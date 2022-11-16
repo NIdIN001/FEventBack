@@ -4,6 +4,7 @@ import ru.nsu.fevent.dto.EventCreateRequest
 import ru.nsu.fevent.dto.EventDto
 import ru.nsu.fevent.entity.Event
 import ru.nsu.fevent.entity.User
+import java.time.LocalDateTime
 
 object EventMapper {
     fun mapEventCreateRequestToEntity(eventCreateRequest: EventCreateRequest, creator: User): Event =
@@ -21,7 +22,14 @@ object EventMapper {
             creator = creator
         )
 
-    fun mapEntityToDto(eventEntity: Event, creatorId: Int): EventDto =
+    fun mapEntityToDto(eventEntity: Event,
+                       login: String,
+                       firstname: String,
+                       lastName: String,
+                       city: String?,
+                       email: String?,
+                       phoneNumber: String?,
+                       createdAt: LocalDateTime?): EventDto =
         EventDto(
             eventEntity.id,
             eventEntity.name,
@@ -34,6 +42,12 @@ object EventMapper {
             eventEntity.ageMax,
             eventEntity.isOnline,
             eventEntity.isPrivate,
-            creatorId
+            login,
+            firstname,
+            lastName,
+            city,
+            email,
+            phoneNumber,
+            createdAt.toString()
         )
 }

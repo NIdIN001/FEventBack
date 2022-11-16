@@ -12,5 +12,11 @@ data class EventDto(
     val ageMax: Int?,
     val isOnline: Boolean,
     val isPrivate: Boolean,
-    val creatorId: Int
+    val login: String,
+    val firstname: String,
+    val lastName: String,
+    val city: String?,
+    val email: String?,
+    val phoneNumber: String?,
+    val createdAt: String
 )
