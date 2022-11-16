@@ -6,21 +6,15 @@ import ru.nsu.fevent.dto.EventDto
 import ru.nsu.fevent.repository.EventRepository
 import ru.nsu.fevent.repository.UserRepository
 import ru.nsu.fevent.utils.EventMapper
+import ru.nsu.fevent.utils.UserMapper
 
 @Service
 class EventService(val eventRepository: EventRepository, val userRepository: UserRepository){
     fun createEvent(eventCreateRequest: EventCreateRequest, creatorId: Int): EventDto{
         val creator = userRepository.getById(creatorId)
-        val login = creator.login
-        val firstname = creator.firstName
-        val lastname = creator.lastName
-        val city = creator.city
-        val email = creator.email
-        val phoneNumber = creator.phoneNumber
-        val createdAt = creator.createdAt
         val event = EventMapper.mapEventCreateRequestToEntity(eventCreateRequest, creator)
         val savedEvent = eventRepository.save(event)
 
-        return EventMapper.mapEntityToDto(savedEvent, login, firstname, lastname, city, email, phoneNumber, createdAt)
+        return EventMapper.mapEntityToDto(savedEvent, UserMapper.mapEntityToDto(creator))
     }
 }

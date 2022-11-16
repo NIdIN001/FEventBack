@@ -2,6 +2,7 @@ package ru.nsu.fevent.utils
 
 import ru.nsu.fevent.dto.EventCreateRequest
 import ru.nsu.fevent.dto.EventDto
+import ru.nsu.fevent.dto.UserDto
 import ru.nsu.fevent.entity.Event
 import ru.nsu.fevent.entity.User
 import java.time.LocalDateTime
@@ -23,13 +24,7 @@ object EventMapper {
         )
 
     fun mapEntityToDto(eventEntity: Event,
-                       login: String,
-                       firstname: String,
-                       lastName: String,
-                       city: String?,
-                       email: String?,
-                       phoneNumber: String?,
-                       createdAt: LocalDateTime?): EventDto =
+                       userDto: UserDto): EventDto =
         EventDto(
             eventEntity.id,
             eventEntity.name,
@@ -42,12 +37,6 @@ object EventMapper {
             eventEntity.ageMax,
             eventEntity.isOnline,
             eventEntity.isPrivate,
-            login,
-            firstname,
-            lastName,
-            city,
-            email,
-            phoneNumber,
-            createdAt.toString()
+            userDto
         )
 }
