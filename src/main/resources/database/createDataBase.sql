@@ -3,6 +3,7 @@ CREATE SEQUENCE IF NOT EXISTS friend_seq;
 CREATE SEQUENCE IF NOT EXISTS geo_district_seq;
 CREATE SEQUENCE IF NOT EXISTS geo_region_seq;
 CREATE SEQUENCE IF NOT EXISTS geo_city_seq;
+CREATE SEQUENCE IF NOT EXISTS event_seq;
 
 CREATE TABLE IF NOT EXISTS users
 (
@@ -51,4 +52,22 @@ CREATE TABLE IF NOT EXISTS geo_cities (
     "name"              VARCHAR(255)        NOT NULL,
 
     CONSTRAINT fk_city_region FOREIGN KEY ("region_id") REFERENCES geo_regions (id)
+);
+
+CREATE TABLE IF NOT EXISTS events
+(
+	"id"                INTEGER            PRIMARY KEY NOT NULL,
+	"name"              VARCHAR(128)       NOT NULL,
+	"description"       TEXT,
+	"datetime_start"    TIMESTAMP          NOT NULL,
+	"datetime_end"      TIMESTAMP          NOT NULL,
+	"address"           VARCHAR(128)       NOT NULL,
+	"max_members"       INTEGER,
+	"age_min"           INTEGER,
+	"age_max"           INTEGER,
+	"is_online"         BOOLEAN            NOT NULL,
+	"is_private"        BOOLEAN            NOT NULL,
+	"creator_id"        INTEGER            NOT NULL,
+
+	CONSTRAINT fk_event_creator FOREIGN KEY ("creator_id") REFERENCES users ("id")
 );
