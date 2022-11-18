@@ -17,9 +17,11 @@ data class EventCreateRequest (
     @field:NotBlank(message = "Поле \"Окончание\" не должно быть пустым")
     val datetimeEnd: LocalDateTime,
 
-    @field:NotBlank(message = "Поле \"Место проведения\" не должно быть пустым")
-    @field:Size(max = 128, message = "Длина поля \"Место проведения\" должна быть до 128 символов")
-    val address: String,
+    @field:NotBlank(message = "Поле \"Широта\" не должно быть пустым")
+    val latitude: Float,
+
+    @field:NotBlank(message = "Поле \"Долгота\" не должно быть пустым")
+    val longitude: Float,
 
     val maxMembers: Int?,
 
