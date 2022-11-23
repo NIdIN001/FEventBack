@@ -24,8 +24,11 @@ data class Event(
     @Column(name = "datetime_end")
     val datetimeEnd: LocalDateTime = LocalDateTime.now(),
 
-    @Column(name = "address")
-    val address: String = "",
+    @Column(name = "latitude")
+    val latitude: Float = 0f,
+
+    @Column(name = "longitude")
+    val longitude: Float = 0f,
 
     @Column(name = "max_members")
     val maxMembers: Int? = null,

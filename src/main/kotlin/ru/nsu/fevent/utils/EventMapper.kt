@@ -14,7 +14,8 @@ object EventMapper {
             description = eventCreateRequest.description,
             datetimeStart = eventCreateRequest.datetimeStart,
             datetimeEnd = eventCreateRequest.datetimeEnd,
-            address = eventCreateRequest.address,
+            latitude = eventCreateRequest.latitude,
+            longitude = eventCreateRequest.longitude,
             maxMembers = eventCreateRequest.maxMembers,
             ageMin = eventCreateRequest.ageMin,
             ageMax = eventCreateRequest.ageMax,
@@ -23,15 +24,15 @@ object EventMapper {
             creator = creator
         )
 
-    fun mapEntityToDto(eventEntity: Event,
-                       userDto: UserDto): EventDto =
+    fun mapEntityToDto(eventEntity: Event, userDto: UserDto): EventDto =
         EventDto(
             eventEntity.id,
             eventEntity.name,
             eventEntity.description,
             eventEntity.datetimeStart.toString(),
             eventEntity.datetimeEnd.toString(),
-            eventEntity.address,
+            eventEntity.latitude,
+            eventEntity.longitude,
             eventEntity.maxMembers,
             eventEntity.ageMin,
             eventEntity.ageMax,
