@@ -2,6 +2,7 @@ package ru.nsu.fevent.dto
 
 import java.time.LocalDateTime
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 data class EventCreateRequest (
@@ -11,16 +12,16 @@ data class EventCreateRequest (
 
     val description: String?,
 
-    @field:NotBlank(message = "Поле \"Начало\" не должно быть пустым")
+    @field:NotNull(message = "Поле \"Начало\" не должно быть пустым")
     val datetimeStart: LocalDateTime,
 
-    @field:NotBlank(message = "Поле \"Окончание\" не должно быть пустым")
+    @field:NotNull(message = "Поле \"Окончание\" не должно быть пустым")
     val datetimeEnd: LocalDateTime,
 
-    @field:NotBlank(message = "Поле \"Широта\" не должно быть пустым")
+    @field:NotNull(message = "Поле \"Широта\" не должно быть пустым")
     val latitude: Float,
 
-    @field:NotBlank(message = "Поле \"Долгота\" не должно быть пустым")
+    @field:NotNull(message = "Поле \"Долгота\" не должно быть пустым")
     val longitude: Float,
 
     val maxMembers: Int?,
@@ -29,9 +30,9 @@ data class EventCreateRequest (
 
     val ageMax: Int?,
 
-    @field:NotBlank(message = "Поле \"Формат проведения\" не должно быть пустым")
+    @field:NotNull(message = "Поле \"Формат проведения\" не должно быть пустым")
     val isOnline: Boolean,
 
-    @field:NotBlank(message = "Поле \"Приватность\" не должно быть пустым")
+    @field:NotNull(message = "Поле \"Приватность\" не должно быть пустым")
     val isPrivate: Boolean
 )
