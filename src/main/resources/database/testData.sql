@@ -453,11 +453,3 @@ INSERT INTO friends ( "id", "status", "to_id", "from_id") VALUES
         (nextval('friend_seq'), 'CONFIRMED', 5, 2),
         (nextval('friend_seq'), 'CONFIRMED', 7, 2),
         (nextval('friend_seq'), 'REQUEST', 10, 2);
-
-
-
-
-
-
-
-
