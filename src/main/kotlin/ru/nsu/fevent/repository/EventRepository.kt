@@ -9,7 +9,7 @@ import ru.nsu.fevent.entity.Event
 @Repository
 interface EventRepository : CrudRepository<Event?, Int?> {
     @Query("select e from Event e where e.name like %?1%")
-    fun searchByName(s: String, pageable: Pageable) : List<Event>
+    fun searchByName(substring: String, pageable: Pageable) : List<Event>
 
     fun getById(id: Int): Event
 }

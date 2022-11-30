@@ -3,10 +3,7 @@ package ru.nsu.fevent.service
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
-import ru.nsu.fevent.dto.EventCreateRequest
-import ru.nsu.fevent.dto.EventDto
-import ru.nsu.fevent.dto.EventRequest
-import ru.nsu.fevent.dto.EventViewDto
+import ru.nsu.fevent.dto.*
 import ru.nsu.fevent.repository.EventRepository
 import ru.nsu.fevent.repository.UserRepository
 import ru.nsu.fevent.utils.EventMapper
@@ -22,24 +19,19 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
         return EventMapper.mapEntityToDto(savedEvent, UserMapper.mapEntityToDto(creator))
     }
 
-    fun viewEvents(s: String, sort: String, page: Int): List<EventViewDto>{
-        var direction = Sort.by(Sort.Direction.ASC, "name")
-        if (sort == "desc"){
-            direction = Sort.by(Sort.Direction.DESC, "name")
-        }
+    fun viewEvents(substring: String, page: Int, pagesize: Int): EventViewDto {
+        val foundEvents = eventRepository.searchByName(
+            substring,
+            PageRequest.of(page - 1, pagesize, Sort.by(Sort.Direction.ASC, "name"))
+        )
+            .map { event -> EventMapper.mapEntityToFoundDto(event) }
 
-        val perPage = 10
-        val searchedEvents = eventRepository.searchByName(s, PageRequest.of(page - 1, perPage, direction))
+        val pageCount = if (foundEvents.size % pagesize == 0) foundEvents.size/pagesize else foundEvents.size/pagesize + 1
 
-        var viewEvents = ArrayList<EventViewDto>()
-        for (i in searchedEvents.indices) {
-            viewEvents += EventMapper.mapEntityToViewDto(searchedEvents[i])
-        }
-
-        return viewEvents
+        return EventMapper.mapFoundDtoToViewDto(foundEvents, pageCount)
     }
 
-    fun chooseEvent(eventRequest: EventRequest): EventDto{
+    fun findEventById(eventRequest: EventRequest): EventDto{
         val event = eventRepository.getById(eventRequest.eventId)
 
         return EventMapper.mapEntityToDto(event, UserMapper.mapEntityToDto(event.creator))

@@ -1,6 +1,7 @@
 package ru.nsu.fevent.dto
 
 import java.time.LocalDateTime
+import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
@@ -24,10 +25,13 @@ data class EventCreateRequest (
     @field:NotNull(message = "Поле \"Долгота\" не должно быть пустым")
     val longitude: Float,
 
+    @Min(1)
     val maxMembers: Int?,
 
+    @Min(0)
     val ageMin: Int?,
 
+    @Min(0)
     val ageMax: Int?,
 
     @field:NotNull(message = "Поле \"Формат проведения\" не должно быть пустым")
