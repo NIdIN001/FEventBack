@@ -194,6 +194,8 @@ INSERT INTO users
             , CURRENT_TIMESTAMP
             , 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNCIsImV4cCI6MTY3MDM0MTc5M30.GHx0Mi_Jd9Ac3E9ajlB_k-nSIecYT1RZAXU7YpMpSPw');
 
+SELECT setval('user_seq', (SELECT MAX(id) + 1 FROM users));
+
 INSERT INTO events
     ( "id"
     , "name"
