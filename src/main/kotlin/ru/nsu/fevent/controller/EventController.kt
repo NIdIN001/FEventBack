@@ -21,19 +21,19 @@ class EventController(val eventService: EventService) {
 
     @GetMapping("/view")
     fun view(
-        @RequestParam("substring", defaultValue = "") substring: String,
+        @RequestParam("name", defaultValue = "") name: String,
         @RequestParam("page", defaultValue = "1") page: Int,
-        @RequestParam("pagesize", defaultValue = "1") pagesize: Int
+        @RequestParam("pagesize", defaultValue = "10") pagesize: Int
     ): Response<EventViewDto>{
-        val viewEvents = eventService.viewEvents(substring, page, pagesize)
+        val viewEvents = eventService.viewEvents(name, page, pagesize)
         return Response.withData(viewEvents)
     }
 
-    @GetMapping("/choose")
+    @GetMapping("/choose/{id}")
     fun choose(
-        @RequestBody eventRequest: EventRequest
+        @PathVariable id: Int
     ): Response<EventDto>{
-        val chooseEvent = eventService.findEventById(eventRequest)
+        val chooseEvent = eventService.findEventById(id)
         return Response.withData(chooseEvent)
     }
 }

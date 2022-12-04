@@ -19,9 +19,9 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
         return EventMapper.mapEntityToDto(savedEvent, UserMapper.mapEntityToDto(creator))
     }
 
-    fun viewEvents(substring: String, page: Int, pagesize: Int): EventViewDto {
-        val foundEvents = eventRepository.searchByName(
-            substring,
+    fun viewEvents(name: String, page: Int, pagesize: Int): EventViewDto {
+        val foundEvents = eventRepository.findAllByName(
+            name,
             PageRequest.of(page - 1, pagesize, Sort.by(Sort.Direction.ASC, "name"))
         )
             .map { event -> EventMapper.mapEntityToFoundDto(event) }
@@ -31,8 +31,8 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
         return EventMapper.mapFoundDtoToViewDto(foundEvents, pageCount)
     }
 
-    fun findEventById(eventRequest: EventRequest): EventDto{
-        val event = eventRepository.getById(eventRequest.eventId)
+    fun findEventById(eventId: Int): EventDto{
+        val event = eventRepository.getById(eventId)
 
         return EventMapper.mapEntityToDto(event, UserMapper.mapEntityToDto(event.creator))
     }
