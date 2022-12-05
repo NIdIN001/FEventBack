@@ -7,6 +7,8 @@ import javax.persistence.*
 data class City (
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "geo_city_seq")
+    @SequenceGenerator(name = "geo_city_seq", allocationSize = 1)
     val id: Int,
 
     @Column(name = "name")
