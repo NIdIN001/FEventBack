@@ -1,11 +1,8 @@
 package ru.nsu.fevent.utils
 
-import ru.nsu.fevent.dto.EventCreateRequest
-import ru.nsu.fevent.dto.EventDto
-import ru.nsu.fevent.dto.UserDto
+import ru.nsu.fevent.dto.*
 import ru.nsu.fevent.entity.Event
 import ru.nsu.fevent.entity.User
-import java.time.LocalDateTime
 
 object EventMapper {
     fun mapEventCreateRequestToEntity(eventCreateRequest: EventCreateRequest, creator: User): Event =
@@ -39,5 +36,22 @@ object EventMapper {
             eventEntity.isOnline,
             eventEntity.isPrivate,
             userDto
+        )
+
+    fun mapEntityToFoundDto(searchedEvents: Event): EventFoundDto =
+        EventFoundDto(
+            searchedEvents.id,
+            searchedEvents.name,
+            searchedEvents.datetimeStart.toString(),
+            searchedEvents.datetimeEnd.toString(),
+            searchedEvents.latitude,
+            searchedEvents.longitude,
+            searchedEvents.maxMembers
+        )
+
+    fun mapFoundDtoToViewDto(foundsDto: List<EventFoundDto>, pageCount: Int): EventViewDto =
+        EventViewDto(
+            foundsDto,
+            pageCount
         )
 }

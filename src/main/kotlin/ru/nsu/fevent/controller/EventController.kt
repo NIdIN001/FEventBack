@@ -1,9 +1,7 @@
 package ru.nsu.fevent.controller
 
 import org.springframework.web.bind.annotation.*
-import ru.nsu.fevent.dto.EventCreateRequest
-import ru.nsu.fevent.dto.EventDto
-import ru.nsu.fevent.dto.Response
+import ru.nsu.fevent.dto.*
 import ru.nsu.fevent.service.EventService
 import ru.nsu.fevent.utils.JwtUtils
 import javax.validation.Valid
@@ -19,5 +17,23 @@ class EventController(val eventService: EventService) {
         val creatorId = JwtUtils.getUserIdByAccessToken(accessToken)
         val createdEvent = eventService.createEvent(eventCreateRequest, creatorId)
         return Response.withData(createdEvent)
+    }
+
+    @GetMapping("/view")
+    fun view(
+        @RequestParam("name", defaultValue = "") name: String,
+        @RequestParam("page", defaultValue = "1") page: Int,
+        @RequestParam("pagesize", defaultValue = "10") pagesize: Int
+    ): Response<EventViewDto>{
+        val viewEvents = eventService.viewEvents(name, page, pagesize)
+        return Response.withData(viewEvents)
+    }
+
+    @GetMapping("/choose/{id}")
+    fun choose(
+        @PathVariable id: Int
+    ): Response<EventDto>{
+        val chooseEvent = eventService.findEventById(id)
+        return Response.withData(chooseEvent)
     }
 }
