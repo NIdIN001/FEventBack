@@ -3,6 +3,8 @@ package ru.nsu.fevent.controller
 import org.springframework.web.bind.annotation.*
 import ru.nsu.fevent.dto.*
 import ru.nsu.fevent.service.UserService
+import ru.nsu.fevent.utils.JwtUtils
+import javax.persistence.Id
 import javax.validation.Valid
 
 @RestController
@@ -33,5 +35,13 @@ class UserController(val userService: UserService) {
                        @RequestBody @Valid request: ChangePasswordRequest): Response<UserDto> {
         val updatedUser = userService.changePassword(accessToken, request)
         return Response.withData(updatedUser)
+    }
+
+    @PostMapping("/join/{id}")
+    fun joinToEvent(@CookieValue(name = "accessToken") accessToken: String,
+                    @PathVariable id: Int): Response<String> {
+        val userId = JwtUtils.getUserIdByAccessToken(accessToken)
+        val joined = userService.joinToEvent(userId, id)
+        return Response.withData(joined)
     }
 }

@@ -2,6 +2,7 @@ package ru.nsu.fevent.utils
 
 import ru.nsu.fevent.dto.*
 import ru.nsu.fevent.entity.Event
+import ru.nsu.fevent.entity.Members
 import ru.nsu.fevent.entity.User
 
 object EventMapper {
@@ -31,6 +32,7 @@ object EventMapper {
             eventEntity.latitude,
             eventEntity.longitude,
             eventEntity.maxMembers,
+            eventEntity.membersCount,
             eventEntity.ageMin,
             eventEntity.ageMax,
             eventEntity.isOnline,
@@ -46,12 +48,19 @@ object EventMapper {
             searchedEvents.datetimeEnd.toString(),
             searchedEvents.latitude,
             searchedEvents.longitude,
-            searchedEvents.maxMembers
+            searchedEvents.maxMembers,
+            searchedEvents.membersCount
         )
 
     fun mapFoundDtoToViewDto(foundsDto: List<EventFoundDto>, pageCount: Int): EventViewDto =
         EventViewDto(
             foundsDto,
             pageCount
+        )
+
+    fun mapToMembers(userId: User, eventId: Event): Members =
+        Members(
+            user = userId,
+            event = eventId
         )
 }

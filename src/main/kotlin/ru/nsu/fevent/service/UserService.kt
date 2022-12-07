@@ -6,17 +6,17 @@ import ru.nsu.fevent.dto.ProfileInfoRequest
 import ru.nsu.fevent.dto.RegistrationRequest
 import ru.nsu.fevent.dto.UserDto
 import ru.nsu.fevent.entity.User
+import ru.nsu.fevent.exception.JoinException
 import ru.nsu.fevent.exception.RegistrationException
 import ru.nsu.fevent.exception.UserNotFoundException
+import ru.nsu.fevent.repository.EventRepository
+import ru.nsu.fevent.repository.MembersRepository
 import ru.nsu.fevent.repository.UserRepository
-import ru.nsu.fevent.utils.JwtUtils
-import ru.nsu.fevent.utils.PasswordGenerationUtils
-import ru.nsu.fevent.utils.PasswordUtils
-import ru.nsu.fevent.utils.UserMapper
+import ru.nsu.fevent.utils.*
 import java.time.LocalDateTime
 
 @Service
-class UserService(val userRepository: UserRepository) {
+class UserService(val userRepository: UserRepository, val eventRepository: EventRepository, val membersRepository: MembersRepository) {
 
     fun registerUser(registrationRequest: RegistrationRequest): UserDto {
         PasswordUtils.checkPasswordConstraints(registrationRequest.password, registrationRequest.passwordCheck)
@@ -81,5 +81,16 @@ class UserService(val userRepository: UserRepository) {
 
         val savedUser = userRepository.save(user)
         return UserMapper.mapEntityToDto(savedUser)
+    }
+
+    fun joinToEvent(userId: Int, eventId: Int): String {
+        val event = eventRepository.getById(eventId)
+        if (event.maxMembers == null || event.membersCount < event.maxMembers!!) {
+            val user = userRepository.getById(userId)
+            event.membersCount += 1
+            val members = EventMapper.mapToMembers(user, event)
+            membersRepository.save(members)
+            return ("SUCCESS")
+        } else throw JoinException("Достигнуто максимальное количество человек")
     }
 }
