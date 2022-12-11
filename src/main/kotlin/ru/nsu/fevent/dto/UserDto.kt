@@ -1,6 +1,7 @@
 package ru.nsu.fevent.dto
 
 data class UserDto(
+    val id: Int,
     val login: String,
     val firstName: String,
     val lastName: String,

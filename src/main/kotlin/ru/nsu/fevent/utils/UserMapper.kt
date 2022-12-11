@@ -20,6 +20,7 @@ object UserMapper {
 
     fun mapEntityToDto(userEntity: User): UserDto =
         UserDto(
+            userEntity.id,
             userEntity.login,
             userEntity.firstName,
             userEntity.lastName,
