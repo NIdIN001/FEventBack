@@ -19,6 +19,8 @@ class MvcConfiguration(
         registry.addInterceptor(authenticationInterceptor)
             .addPathPatterns("/**")
             .excludePathPatterns(
+                "/event/view",
+                "/event/choose/**",
                 "/user/register",
                 "/authenticate/login",
                 "/actuator/**",
