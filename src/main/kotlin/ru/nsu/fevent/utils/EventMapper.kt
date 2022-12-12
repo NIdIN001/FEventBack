@@ -54,4 +54,10 @@ object EventMapper {
             foundsDto,
             pageCount
         )
+
+    fun mapEntityToEventWithDistanceDto(event: Event, distance: Int): EventWithDistanceDto {
+        val creatorDto = UserMapper.mapEntityToDto(event.creator)
+        val eventDto = mapEntityToDto(event, creatorDto)
+        return EventWithDistanceDto(eventDto, distance)
+    }
 }

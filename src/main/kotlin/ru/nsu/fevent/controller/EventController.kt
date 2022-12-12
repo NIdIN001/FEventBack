@@ -1,9 +1,12 @@
 package ru.nsu.fevent.controller
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
 import ru.nsu.fevent.dto.*
 import ru.nsu.fevent.service.EventService
 import ru.nsu.fevent.utils.JwtUtils
+import ru.nsu.fevent.utils.Location
 import javax.validation.Valid
 
 @RestController
@@ -35,5 +38,15 @@ class EventController(val eventService: EventService) {
     ): Response<EventDto>{
         val chooseEvent = eventService.findEventById(id)
         return Response.withData(chooseEvent)
+    }
+
+    @GetMapping("/closest/{latitude}/{longitude}")
+    fun getAllEventsSortedByDistance(
+        @PathVariable latitude: Double,
+        @PathVariable longitude: Double,
+        pageable: Pageable
+        ): Response<Page<EventWithDistanceDto>> {
+            val userLocation = Location(latitude, longitude)
+            return Response.withData(eventService.findAllWithDistance(userLocation, pageable))
     }
 }
