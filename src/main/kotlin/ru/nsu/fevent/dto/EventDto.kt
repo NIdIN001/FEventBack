@@ -9,6 +9,7 @@ data class EventDto(
     val latitude: Float,
     val longitude: Float,
     val maxMembers: Int?,
+    val membersCount: Int,
     val ageMin: Int?,
     val ageMax: Int?,
     val isOnline: Boolean,

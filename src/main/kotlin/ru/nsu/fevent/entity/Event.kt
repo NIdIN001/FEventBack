@@ -33,6 +33,9 @@ data class Event(
     @Column(name = "max_members")
     val maxMembers: Int? = null,
 
+    @Column(name = "members_count")
+    var membersCount: Int = 0,
+
     @Column(name = "age_min")
     val ageMin: Int? = null,
 

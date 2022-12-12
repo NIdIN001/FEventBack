@@ -7,5 +7,6 @@ data class EventFoundDto (
     val datetimeEnd: String,
     val latitude: Float,
     val longitude: Float,
-    val maxMembers: Int?
+    val maxMembers: Int?,
+    val membersCount: Int
 )
