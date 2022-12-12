@@ -10,6 +10,7 @@ object EventMapper {
         Event(
             name = eventCreateRequest.name,
             description = eventCreateRequest.description,
+            category = eventCreateRequest.category,
             datetimeStart = eventCreateRequest.datetimeStart,
             datetimeEnd = eventCreateRequest.datetimeEnd,
             latitude = eventCreateRequest.latitude,
@@ -27,6 +28,7 @@ object EventMapper {
             eventEntity.id,
             eventEntity.name,
             eventEntity.description,
+            eventEntity.category,
             eventEntity.datetimeStart.toString(),
             eventEntity.datetimeEnd.toString(),
             eventEntity.latitude,
@@ -44,6 +46,7 @@ object EventMapper {
         EventFoundDto(
             searchedEvents.id,
             searchedEvents.name,
+            searchedEvents.category,
             searchedEvents.datetimeStart.toString(),
             searchedEvents.datetimeEnd.toString(),
             searchedEvents.latitude,

@@ -4,6 +4,7 @@ data class EventDto(
     val id: Int,
     val name: String,
     val description: String?,
+    val category: String,
     val datetimeStart: String,
     val datetimeEnd: String,
     val latitude: Float,
