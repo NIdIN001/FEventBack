@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS events
 	"id"                INTEGER            PRIMARY KEY NOT NULL,
 	"name"              VARCHAR(128)       NOT NULL,
 	"description"       TEXT,
+	"category"          VARCHAR(50)        NOT NULL,
 	"datetime_start"    TIMESTAMP          NOT NULL,
 	"datetime_end"      TIMESTAMP          NOT NULL,
 	"latitude"          REAL               NOT NULL,

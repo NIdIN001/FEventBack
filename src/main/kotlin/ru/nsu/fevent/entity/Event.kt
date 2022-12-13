@@ -18,6 +18,9 @@ data class Event(
     @Column(name = "description")
     val description: String? = null,
 
+    @Column(name = "category")
+    val category: String = "",
+
     @Column(name = "datetime_start")
     val datetimeStart: LocalDateTime = LocalDateTime.now(),
 

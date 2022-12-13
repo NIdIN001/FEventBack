@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import ru.nsu.fevent.dto.*
+import ru.nsu.fevent.entity.Event
 import ru.nsu.fevent.repository.EventRepository
 import ru.nsu.fevent.repository.UserRepository
 import ru.nsu.fevent.utils.EventMapper
@@ -19,16 +20,37 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
         return EventMapper.mapEntityToDto(savedEvent, UserMapper.mapEntityToDto(creator))
     }
 
-    fun viewEvents(name: String, page: Int, pagesize: Int): EventViewDto {
+    fun filterEvents(foundEvents: List<Event>, isOnline: Boolean?, ageMin: Int?, ageMax: Int?, category: String?): List<Event> {
+        var filteredEvents = foundEvents
+        if (isOnline != null) {
+            filteredEvents = foundEvents.filter { it.isOnline == isOnline }
+        }
+        if (ageMin != null) {
+            filteredEvents = filteredEvents.filter { it.ageMin == null || it.ageMin!! <= ageMin }
+        }
+
+        if (ageMax != null) {
+            filteredEvents = filteredEvents.filter { it.ageMax == null || it.ageMax!! >= ageMax }
+        }
+
+        if (category != null) {
+            filteredEvents = filteredEvents.filter { it.category == category }
+        }
+
+        return filteredEvents
+    }
+
+    fun viewEvents(name: String, page: Int, pagesize: Int, isOnline: Boolean?, ageMin: Int?, ageMax: Int?, category: String?): EventViewDto {
         val foundEvents = eventRepository.findAllByName(
             name,
             PageRequest.of(page - 1, pagesize, Sort.by(Sort.Direction.ASC, "name"))
         )
+        val filteredEvents = filterEvents(foundEvents, isOnline, ageMin, ageMax, category)
             .map { event -> EventMapper.mapEntityToFoundDto(event) }
 
-        val pageCount = if (foundEvents.size % pagesize == 0) foundEvents.size/pagesize else foundEvents.size/pagesize + 1
+        val pageCount = if (filteredEvents.size % pagesize == 0) filteredEvents.size/pagesize else filteredEvents.size/pagesize + 1
 
-        return EventMapper.mapFoundDtoToViewDto(foundEvents, pageCount)
+        return EventMapper.mapFoundDtoToViewDto(filteredEvents, pageCount)
     }
 
     fun findEventById(eventId: Int): EventDto{

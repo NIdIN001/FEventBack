@@ -3,6 +3,7 @@ package ru.nsu.fevent.dto
 data class EventFoundDto (
     val id: Int,
     val name: String,
+    val category: String ,
     val datetimeStart: String,
     val datetimeEnd: String,
     val latitude: Float,

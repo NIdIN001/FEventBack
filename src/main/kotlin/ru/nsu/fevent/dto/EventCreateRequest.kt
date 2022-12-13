@@ -13,6 +13,8 @@ data class EventCreateRequest (
 
     val description: String?,
 
+    val category: String,
+
     @field:NotNull(message = "Поле \"Начало\" не должно быть пустым")
     val datetimeStart: LocalDateTime,
 
