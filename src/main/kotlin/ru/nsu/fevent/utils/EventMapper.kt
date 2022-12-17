@@ -16,6 +16,7 @@ object EventMapper {
             latitude = eventCreateRequest.latitude,
             longitude = eventCreateRequest.longitude,
             maxMembers = eventCreateRequest.maxMembers,
+            membersCount = 0,
             ageMin = eventCreateRequest.ageMin,
             ageMax = eventCreateRequest.ageMax,
             isOnline = eventCreateRequest.isOnline,
