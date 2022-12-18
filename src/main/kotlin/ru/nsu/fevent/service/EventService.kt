@@ -23,8 +23,8 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
 
     fun filterEvents(foundEvents: List<Event>, name: String?, isOnline: Boolean?, ageMin: Int?, ageMax: Int?, category: String?): List<Event> {
         var filteredEvents = foundEvents
-        if (name != null) {
-            filteredEvents = foundEvents.filter { it.name.contains(name, ignoreCase = true) }
+        if (name != "") {
+            filteredEvents = foundEvents.filter { it.name.contains(name!!, ignoreCase = true) }
         }
         if (isOnline != null) {
             filteredEvents = foundEvents.filter { it.isOnline == isOnline }
@@ -37,7 +37,7 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
             filteredEvents = filteredEvents.filter { it.ageMax == null || it.ageMax!! >= ageMax }
         }
 
-        if (category != null) {
+        if (category != "") {
             filteredEvents = filteredEvents.filter { it.category == category }
         }
 
