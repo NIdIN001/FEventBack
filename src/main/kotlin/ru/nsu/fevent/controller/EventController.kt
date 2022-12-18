@@ -40,10 +40,10 @@ class EventController(val eventService: EventService) {
         return Response.withData(chooseEvent)
     }
 
-    @GetMapping("/closest/{latitude}/{longitude}")
+    @GetMapping("/closest")
     fun getAllEventsSortedByDistance(
-        @PathVariable latitude: Double,
-        @PathVariable longitude: Double,
+        @RequestParam latitude: Double,
+        @RequestParam longitude: Double,
         pageable: Pageable
         ): Response<Page<EventWithDistanceDto>> {
             val userLocation = Location(latitude, longitude)
