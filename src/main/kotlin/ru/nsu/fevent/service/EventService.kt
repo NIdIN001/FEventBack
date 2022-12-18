@@ -1,13 +1,14 @@
 package ru.nsu.fevent.service
 
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
+import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
 import ru.nsu.fevent.dto.*
 import ru.nsu.fevent.entity.Event
 import ru.nsu.fevent.repository.EventRepository
 import ru.nsu.fevent.repository.UserRepository
+import ru.nsu.fevent.utils.CoordinatesUtils
 import ru.nsu.fevent.utils.EventMapper
+import ru.nsu.fevent.utils.Location
 import ru.nsu.fevent.utils.UserMapper
 
 @Service
@@ -59,5 +60,21 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
         val event = eventRepository.getById(eventId)
 
         return EventMapper.mapEntityToDto(event, UserMapper.mapEntityToDto(event.creator))
+    }
+
+    fun findAllWithDistance(userLocation: Location, pageable: Pageable): Page<EventWithDistanceDto> {
+        val closestEvents = eventRepository.findClosest(userLocation.latitude, userLocation.longitude, pageable)
+
+        val eventsWithDistance = closestEvents.stream()
+            .map { event ->
+                EventMapper.mapEntityToEventWithDistanceDto(
+                    event,
+                    CoordinatesUtils.calculateDistanceInMetresBetweenLocations(
+                        userLocation, Location(event.latitude.toDouble(), event.longitude.toDouble())))
+            }
+            .sorted(Comparator.comparing(EventWithDistanceDto::distanceFromUserInMetres))
+            .toList()
+
+        return PageImpl(eventsWithDistance, pageable, eventsWithDistance.size.toLong())
     }
 }

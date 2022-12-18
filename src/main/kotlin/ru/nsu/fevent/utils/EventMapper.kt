@@ -62,6 +62,12 @@ object EventMapper {
             pageCount
         )
 
+    fun mapEntityToEventWithDistanceDto(event: Event, distance: Int): EventWithDistanceDto {
+        val creatorDto = UserMapper.mapEntityToDto(event.creator)
+        val eventDto = mapEntityToDto(event, creatorDto)
+        return EventWithDistanceDto(eventDto, distance)
+    }
+
     fun mapToMembers(userId: User, eventId: Event): Members =
         Members(
             user = userId,
