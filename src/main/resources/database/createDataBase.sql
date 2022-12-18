@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS events
 	"latitude"          REAL               NOT NULL,
 	"longitude"         REAL               NOT NULL,
 	"max_members"       INTEGER,
-	"members_count"     INTEGER,
+	"members_count"     INTEGER            NOT NULL DEFAULT 0,
 	"age_min"           INTEGER,
 	"age_max"           INTEGER,
 	"is_online"         BOOLEAN            NOT NULL,

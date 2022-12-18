@@ -8,7 +8,7 @@ import ru.nsu.fevent.entity.Event
 @Repository
 interface EventRepository : CrudRepository<Event?, Int?> {
 
-    fun findAllByName(name: String, pageable: Pageable) : List<Event>
+    fun findAll(pageable: Pageable) : List<Event>
 
     fun getById(id: Int): Event
 }

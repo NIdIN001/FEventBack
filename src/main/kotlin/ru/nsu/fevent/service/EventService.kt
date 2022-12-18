@@ -20,8 +20,11 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
         return EventMapper.mapEntityToDto(savedEvent, UserMapper.mapEntityToDto(creator))
     }
 
-    fun filterEvents(foundEvents: List<Event>, isOnline: Boolean?, ageMin: Int?, ageMax: Int?, category: String?): List<Event> {
+    fun filterEvents(foundEvents: List<Event>, name: String?, isOnline: Boolean?, ageMin: Int?, ageMax: Int?, category: String?): List<Event> {
         var filteredEvents = foundEvents
+        if (name != null) {
+            filteredEvents = foundEvents.filter { it.name.contains(name, ignoreCase = true) }
+        }
         if (isOnline != null) {
             filteredEvents = foundEvents.filter { it.isOnline == isOnline }
         }
@@ -40,12 +43,11 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
         return filteredEvents
     }
 
-    fun viewEvents(name: String, page: Int, pagesize: Int, isOnline: Boolean?, ageMin: Int?, ageMax: Int?, category: String?): EventViewDto {
-        val foundEvents = eventRepository.findAllByName(
-            name,
+    fun viewEvents(name: String?, page: Int, pagesize: Int, isOnline: Boolean?, ageMin: Int?, ageMax: Int?, category: String?): EventViewDto {
+        val foundEvents = eventRepository.findAll(
             PageRequest.of(page - 1, pagesize, Sort.by(Sort.Direction.ASC, "name"))
         )
-        val filteredEvents = filterEvents(foundEvents, isOnline, ageMin, ageMax, category)
+        val filteredEvents = filterEvents(foundEvents, name, isOnline, ageMin, ageMax, category)
             .map { event -> EventMapper.mapEntityToFoundDto(event) }
 
         val pageCount = if (filteredEvents.size % pagesize == 0) filteredEvents.size/pagesize else filteredEvents.size/pagesize + 1
