@@ -21,13 +21,13 @@ class EventController(val eventService: EventService) {
 
     @GetMapping("/view")
     fun view(
-        @RequestParam("name", defaultValue = "") name: String,
+        @RequestParam("name", defaultValue = "") name: String?,
         @RequestParam("page", defaultValue = "1") page: Int,
         @RequestParam("pagesize", defaultValue = "10") pagesize: Int,
         @RequestParam("isOnline", defaultValue = "") isOnline: Boolean?,
         @RequestParam("ageMin", defaultValue = "") ageMin: Int?,
         @RequestParam("ageMax", defaultValue = "") ageMax: Int?,
-        @RequestParam("category", defaultValue = "") category: String?,
+        @RequestParam("category", defaultValue = "") category: String?
     ): Response<EventViewDto>{
         val viewEvents = eventService.viewEvents(name, page, pagesize, isOnline, ageMin, ageMax, category)
         return Response.withData(viewEvents)
