@@ -200,11 +200,13 @@ INSERT INTO events
     ( "id"
     , "name"
     , "description"
+    , "category"
     , "datetime_start"
     , "datetime_end"
     , "latitude"
     , "longitude"
     , "max_members"
+    , "members_count"
     , "age_min"
     , "age_max"
     , "is_online"
@@ -214,11 +216,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Футбол'
             , 'Футбол'
+            , 'Спорт'
             , CURRENT_TIMESTAMP + INTERVAL '1 DAY'
             , CURRENT_TIMESTAMP + INTERVAL '1 DAY 2 HOURS'
             , 54.84762495065463
             , 83.0972361915249
             , 25
+            , 0
             , 10
             , 99
             , false
@@ -228,11 +232,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Баскетбол'
             , 'Баскетбол'
+            , 'Спорт'
             , CURRENT_TIMESTAMP + INTERVAL '2 DAYS'
             , CURRENT_TIMESTAMP + INTERVAL '2 DAYS 2 HOURS'
             , 54.84650934974469
             , 83.09580518481974
             , 12
+            , 0
             , 10
             , 99
             , false
@@ -242,11 +248,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Смотрим на ТЦ'
             , 'Смотрим на ТЦ'
+            , 'Развлечение'
             , CURRENT_TIMESTAMP + INTERVAL '2 DAYS'
             , CURRENT_TIMESTAMP + INTERVAL '2 DAYS 1 HOUR'
             , 54.8392132643726
             , 83.09562279462821
             , 100
+            , 0
             , 10
             , 99
             , false
@@ -256,11 +264,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Идем на пары'
             , 'Идем на пары'
+            , 'Обучение'
             , CURRENT_TIMESTAMP + INTERVAL '2 DAYS'
             , CURRENT_TIMESTAMP + INTERVAL '2 DAYS 1 HOUR'
             , 54.84316727619497
             , 83.09100939515979
             , 100
+            , 0
             , 10
             , 99
             , false
@@ -270,11 +280,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Пицца'
             , 'Пицца'
+            , 'Еда'
             , CURRENT_TIMESTAMP + INTERVAL '1 WEEK'
             , CURRENT_TIMESTAMP + INTERVAL '1 WEEK 1 HOURS'
             , 54.84278424828844
             , 83.09525801416079
             , 7
+            , 0
             , 10
             , 99
             , false
@@ -284,11 +296,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Кайфуем на остановке'
             , 'Кайфуем на остановке'
+            , 'Развлечение'
             , CURRENT_TIMESTAMP + INTERVAL '1 WEEK'
             , CURRENT_TIMESTAMP + INTERVAL '1 WEEK 20 MINUTES'
             , 54.83958396943452
             , 83.08764054063998
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -298,11 +312,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название1'
             , 'Описание1'
+            , 'Категория1'
             , CURRENT_TIMESTAMP + INTERVAL '1 DAY'
             , CURRENT_TIMESTAMP + INTERVAL '1 DAY 2 HOURS'
             , 54.841155710863646
             , 83.09251931627955
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -312,11 +328,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название2'
             , 'Описание2'
+            , 'Категория2'
             , CURRENT_TIMESTAMP + INTERVAL '1 DAY'
             , CURRENT_TIMESTAMP + INTERVAL '1 DAY 1 HOUR'
             , 54.84258901592815
             , 83.09187558611944
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -326,11 +344,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название3'
             , 'Описание3'
+            , 'Категория3'
             , CURRENT_TIMESTAMP
             , CURRENT_TIMESTAMP + INTERVAL '3 HOURS'
             , 54.843411811127396
             , 83.1095904572048
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -340,11 +360,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название4'
             , 'Описание4'
+            , 'Категория4'
             , CURRENT_TIMESTAMP
             , CURRENT_TIMESTAMP + INTERVAL '2 HOURS'
             , 54.84153371518587
             , 83.10147945723813
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -354,11 +376,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название5'
             , 'Описание5'
+            , 'Категория5'
             , CURRENT_TIMESTAMP
             , CURRENT_TIMESTAMP + INTERVAL '2 HOURS'
             , 54.85160274708723
             , 83.10147945718724
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -368,11 +392,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название6'
             , 'Описание6'
+            , 'Категория6'
             , CURRENT_TIMESTAMP
             , CURRENT_TIMESTAMP + INTERVAL '2 HOURS'
             , 54.85215863269312
             , 83.09057895992576
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -382,11 +408,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название7'
             , 'Описание7'
+            , 'Категория7'
             , CURRENT_TIMESTAMP
             , CURRENT_TIMESTAMP + INTERVAL '2 HOURS'
             , 54.86075535475622
             , 83.10459081966796
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -396,11 +424,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название8'
             , 'Описание8'
+            , 'Категория8'
             , CURRENT_TIMESTAMP
             , CURRENT_TIMESTAMP + INTERVAL '2 HOURS'
             , 54.860607150935515
             , 83.11064188310839
             , 10
+            , 0
             , 10
             , 99
             , true
@@ -410,11 +440,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название9'
             , 'Описание9'
+            , 'Категория9'
             , CURRENT_TIMESTAMP
             , CURRENT_TIMESTAMP + INTERVAL '2 HOURS'
             , 54.85658073876142
             , 83.11150019010138
             , 10
+            , 0
             , 10
             , 99
             , false
@@ -424,11 +456,13 @@ INSERT INTO events
             ( nextval('event_seq')
             , 'Название10'
             , 'Описание10'
+            , 'Категория10'
             , CURRENT_TIMESTAMP
             , CURRENT_TIMESTAMP + INTERVAL '2 HOURS'
             , 54.85826051784098
             , 83.09858267169105
             , 10
+            , 0
             , 10
             , 99
             , true

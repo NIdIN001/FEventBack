@@ -1,11 +1,13 @@
 package ru.nsu.fevent.controller
 
 import org.springframework.web.bind.annotation.*
+import ru.nsu.fevent.dto.FriendRelationDto
 import ru.nsu.fevent.dto.Response
 import ru.nsu.fevent.dto.UserDto
 import ru.nsu.fevent.dto.FriendRequest
 import ru.nsu.fevent.entity.FriendStatus
 import ru.nsu.fevent.service.FriendService
+import ru.nsu.fevent.utils.FriendRelationMapper
 import ru.nsu.fevent.utils.JwtUtils
 import ru.nsu.fevent.utils.UserMapper
 
@@ -19,14 +21,13 @@ class FriendController(
     fun getFriendsList(
         @CookieValue(name = "accessToken") accessToken: String,
         @PathVariable status: FriendStatus
-    ): Response<List<UserDto>> {
+    ): Response<List<FriendRelationDto>> {
         val userId = JwtUtils.getUserIdByAccessToken(accessToken)
         val result = friendService.getFriendsList(userId, status)
 
         return Response.withData(result.stream()
-            .map { user -> UserMapper.mapEntityToDto(user) }
-            .toList()
-        )
+            .map { relation -> FriendRelationMapper.mapFriendRelationToDto(relation) }
+            .toList())
     }
 
     @GetMapping("/count/{status}")

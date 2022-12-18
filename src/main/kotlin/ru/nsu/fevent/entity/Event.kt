@@ -18,6 +18,9 @@ data class Event(
     @Column(name = "description")
     val description: String? = null,
 
+    @Column(name = "category")
+    val category: String = "",
+
     @Column(name = "datetime_start")
     val datetimeStart: LocalDateTime = LocalDateTime.now(),
 
@@ -32,6 +35,9 @@ data class Event(
 
     @Column(name = "max_members")
     val maxMembers: Int? = null,
+
+    @Column(name = "members_count")
+    var membersCount: Int = 0,
 
     @Column(name = "age_min")
     val ageMin: Int? = null,

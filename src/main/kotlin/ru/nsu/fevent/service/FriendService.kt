@@ -37,7 +37,7 @@ class FriendService(
         val user = getUserById(userId)
         val friend = getUserById(friendId)
 
-        if (friendRepository.containsRelation(user, friend)){
+        if (friendRepository.containsRelation(user, friend)) {
             throw FriendException("Заявка в друзья уже существует.")
         }
 
@@ -61,10 +61,10 @@ class FriendService(
         return getFriendsList(user, status)
     }
 
-    fun getFriendsList(userId: Int, status: FriendStatus): List<User> {
+    fun getFriendsList(userId: Int, status: FriendStatus): List<FriendRelation> {
         val user = getUserById(userId)
 
-        return getFriendsList(user, status)
+        return friendRepository.findAllByUserAndStatus(user, status)
     }
 
     fun getFriendsCount(userId: Int, status: FriendStatus): Int {
