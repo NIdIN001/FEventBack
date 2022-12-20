@@ -48,7 +48,7 @@ class EventService(val eventRepository: EventRepository, val userRepository: Use
             PageRequest.of(page - 1, pagesize, Sort.by(Sort.Direction.ASC, "name"))
         )
         val filteredEvents = filterEvents(foundEvents, name, isOnline, ageMin, ageMax, category)
-            .map { event -> EventMapper.mapEntityToFoundDto(event) }
+            .map { event -> EventMapper.mapEntityToDto(event, UserMapper.mapEntityToDto(event.creator)) }
 
         val pageCount = if (filteredEvents.size % pagesize == 0) filteredEvents.size/pagesize else filteredEvents.size/pagesize + 1
 

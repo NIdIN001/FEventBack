@@ -43,20 +43,7 @@ object EventMapper {
             userDto
         )
 
-    fun mapEntityToFoundDto(searchedEvents: Event): EventFoundDto =
-        EventFoundDto(
-            searchedEvents.id,
-            searchedEvents.name,
-            searchedEvents.category,
-            searchedEvents.datetimeStart.toString(),
-            searchedEvents.datetimeEnd.toString(),
-            searchedEvents.latitude,
-            searchedEvents.longitude,
-            searchedEvents.maxMembers,
-            searchedEvents.membersCount
-        )
-
-    fun mapFoundDtoToViewDto(foundsDto: List<EventFoundDto>, pageCount: Int): EventViewDto =
+    fun mapFoundDtoToViewDto(foundsDto: List<EventDto>, pageCount: Int): EventViewDto =
         EventViewDto(
             foundsDto,
             pageCount
