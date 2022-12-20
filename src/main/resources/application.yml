@@ -21,6 +21,6 @@ logging:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: cpu9xruz
+    url: changeit
+    username: changeit
+    password: changeit
