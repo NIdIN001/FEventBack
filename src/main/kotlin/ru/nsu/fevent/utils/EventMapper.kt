@@ -4,6 +4,7 @@ import ru.nsu.fevent.dto.*
 import ru.nsu.fevent.entity.Event
 import ru.nsu.fevent.entity.Members
 import ru.nsu.fevent.entity.User
+import java.time.format.DateTimeFormatter
 
 object EventMapper {
     fun mapEventCreateRequestToEntity(eventCreateRequest: EventCreateRequest, creator: User): Event =
@@ -30,8 +31,8 @@ object EventMapper {
             eventEntity.name,
             eventEntity.description,
             eventEntity.category,
-            eventEntity.datetimeStart.toString(),
-            eventEntity.datetimeEnd.toString(),
+            eventEntity.datetimeStart.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")),
+            eventEntity.datetimeEnd.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")),
             eventEntity.latitude,
             eventEntity.longitude,
             eventEntity.maxMembers,
